@@ -1,4 +1,16 @@
+import { Routes, Route } from "react-router-dom";
+
+import HomePage from "@pages/HomePage";
+
+import Layout from "@components/Layout/Layout";
+
 const App = () => {
-  return <div className='text-xl'>App</div>;
+  return (
+    <Routes>
+      <Route path='/' element={<Layout />}>
+        <Route index element={<HomePage />} />
+      </Route>
+    </Routes>
+  );
 };
 export default App;
