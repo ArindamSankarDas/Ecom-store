@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  /* mobile hidden nav-menu */
+  .nav-menu > span {
+    @apply text-lg bg-white border-black font-semibold border-2 pl-6 pr-3 py-2 flex justify-between items-center;
+  }
+
+  .nav-menu > span:hover {
+    @apply cursor-pointer bg-black text-white scale-105 transition-all;
+  }
+
+  .nav-menu > span:active {
+    @apply bg-gray-200 text-black;
+  }
+
+  /* desktop nav-menu */
+
+  .nav-menu-desk {
+    @apply flex justify-around items-center gap-12 text-lg font-semibold;
+  }
+  .nav-menu-desk a:hover {
+    @apply cursor-pointer underline decoration-2 underline-offset-4;
+  }
+
+  .btn-signUp {
+    @apply relative border-2 border-black overflow-hidden px-2 py-1 font-semibold text-sm transition-all;
+  }
+
+  .btn-signUp:hover {
+    @apply text-white bg-black scale-110;
+  }
+  .btn-signUp:active {
+    @apply text-black bg-white;
+  }
+}

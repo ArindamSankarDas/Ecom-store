@@ -1,9 +1,11 @@
 import { Outlet } from "react-router-dom";
 
+import Header from "@components/Header/Header";
+
 const Layout = () => {
   return (
-    <div>
-      Layout
+    <div id='layout' className='w-screen min-h-screen'>
+      <Header />
       <Outlet />
     </div>
   );
