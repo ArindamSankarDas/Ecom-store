@@ -21,8 +21,20 @@
   .nav-menu-desk {
     @apply flex justify-around items-center gap-12 text-lg font-semibold;
   }
-  .nav-menu-desk a:hover {
-    @apply cursor-pointer underline decoration-2 underline-offset-4;
+
+  .nav-menu-desk a {
+    @apply cursor-pointer relative;
+  }
+
+  .nav-menu-desk a::before {
+    @apply absolute transition-all content-[""] w-[0%] h-1 -bottom-1 left-0 bg-black;
+  }
+  .nav-menu-desk a:hover::before {
+    @apply w-full;
+  }
+
+  .stopHover::before {
+    @apply w-full !important;
   }
 
   .btn-signUp {

@@ -14,45 +14,43 @@ const Header = () => {
       <section className='relative z-10 bg-white shadow-md flex justify-between items-center px-6 py-3 lg:justify-around'>
         {/* logo and burger */}
         <div className='flex justify-center items-center gap-7 '>
+          {/* burger (mobile only) */}
           <Menu
             size={33}
             className='cursor-pointer lg:hidden'
             onClick={() => setIsToggled(!isToggled)}
           />
+          {/* logo */}
           <h1 className='text-xl font-bold text-white bg-black px-1 select-none lg:text-2xl'>
             Exclusive
           </h1>
         </div>
 
+        {/* nav menu items (desk only) */}
         <nav className='hidden lg:nav-menu-desk '>
           <NavLink
             to='/'
-            className={({ isActive }) =>
-              isActive ? "underline decoration-2 underline-offset-4" : ""
-            }
+            className={({ isActive }) => (isActive ? "stopHover" : "")}
           >
             Home
           </NavLink>
           <NavLink
             to='/about'
-            className={({ isActive }) =>
-              isActive ? "underline decoration-2 underline-offset-4" : ""
-            }
+            className={({ isActive }) => (isActive ? "stopHover" : "")}
           >
             About
           </NavLink>
           <NavLink
             to='/contact'
-            className={({ isActive }) =>
-              isActive ? "underline decoration-2 underline-offset-4" : ""
-            }
+            className={({ isActive }) => (isActive ? "stopHover" : "")}
           >
             Contact
           </NavLink>
         </nav>
 
-        {/* cart and wishlist */}
+        {/* cart, wishlist and login box, search in desk */}
         <div className='flex justify-around items-center gap-4'>
+          {/* desk search */}
           <div className='hidden mr-10 lg:block relative w-[300px] self-center'>
             <input
               className='w-full text-base px-3 py-2 text-black bg-[#F5F5F5] rounded-md placeholder:text-gray-600 placeholder:font-semibold placeholder:text-sm'
@@ -69,20 +67,47 @@ const Header = () => {
             />
           </div>
 
-          <Heart size={22} />
-          <div className='relative'>
+          {/* wishlist */}
+          <NavLink
+            to={"/wishlist"}
+            className='relative top-[0%] cursor-pointer transition-all hover:-top-[10%] hover:scale-105'
+          >
+            {({ isActive }) =>
+              isActive ? (
+                <Heart size={22} fill='red' strokeWidth={0} />
+              ) : (
+                <Heart size={22} />
+              )
+            }
+          </NavLink>
+
+          {/* shopping cart */}
+          <div className='relative top-[0%] cursor-pointer select-none transition-all hover:-top-[10%]'>
             <span className='absolute -top-2 -right-2 text-[12px] bg-red-600 font-semibold text-white py-[0.90px] px-[6px] rounded-full'>
               6
             </span>
-            <ShoppingCart size={22} />
+            <NavLink to={"/cart"}>
+              {({ isActive }) =>
+                isActive ? (
+                  <ShoppingCart size={22} fill='black' />
+                ) : (
+                  <ShoppingCart size={22} fill='transparent' />
+                )
+              }
+            </NavLink>
           </div>
-          <button className='btn-signUp text-nowrap lg:inline-block'>
+
+          {/* login */}
+          <button
+            className='ml-4 btn-signUp text-nowrap lg:inline-block'
+            onClick={() => navigate("/login")}
+          >
             LOGIN
           </button>
         </div>
       </section>
 
-      {/* hidden menu */}
+      {/* hidden menu (mobile only) */}
       <div
         className={clsx(
           "absolute z-5 flex flex-col gap-8 left-0 w-full py-10 bg-gray-200 transition-all lg:hidden",
@@ -140,4 +165,5 @@ const Header = () => {
     </header>
   );
 };
+
 export default Header;
