@@ -4,7 +4,7 @@ import Header from "@components/Header/Header";
 
 const Layout = () => {
   return (
-    <div id='layout' className='w-screen min-h-screen'>
+    <div id='layout' className='w-screen min-h-screen flex flex-col'>
       <Header />
       <Outlet />
     </div>
