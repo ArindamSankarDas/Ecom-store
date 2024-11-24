@@ -43,7 +43,7 @@ const ContactPage = () => {
         <form className='grid-form' onSubmit={(e) => e.preventDefault()}>
           <Input inputType='text' inputHolder='Your name' />
           <Input inputType='email' inputHolder='Your Email' />
-          <textarea cols={20} rows={5} placeholder='Your Message'></textarea>
+          <textarea cols={20} rows={5} placeholder='Your Message' className='resize-none border'></textarea>
         </form>
         <button
           type='submit'

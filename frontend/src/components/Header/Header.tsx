@@ -9,20 +9,23 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <header className='sticky top-0 left-0 w-full'>
+    <header className='sticky z-20 bg-white top-0 left-0 w-full'>
       {/* header display */}
-      <section className='relative z-10 bg-white shadow-md flex justify-between items-center px-6 py-3 lg:justify-around'>
+      <section className='relative z-10 bg-white border-b-2 border-gray-500 flex justify-between items-center px-6 py-3 lg:justify-around'>
         {/* logo and burger */}
         <div className='flex justify-center items-center gap-7 '>
           {/* burger (mobile only) */}
           <Menu
-            size={33}
-            className='cursor-pointer lg:hidden'
+            size={27}
+            className={clsx(
+              "cursor-pointer transition-all lg:hidden",
+              isToggled ? "rotate-90" : "rotate-0"
+            )}
             onClick={() => setIsToggled(!isToggled)}
           />
           {/* logo */}
           <h1 className='text-xl font-bold text-white bg-black px-1 select-none lg:text-2xl'>
-            Exclusive
+            Ex
           </h1>
         </div>
 
@@ -99,7 +102,7 @@ const Header = () => {
 
           {/* login */}
           <button
-            className='ml-4 btn-signUp text-nowrap lg:inline-block'
+            className='ml-4 btn-signUp text-nowrap rounded-sm lg:inline-block'
             onClick={() => navigate("/login")}
           >
             LOGIN
@@ -110,7 +113,7 @@ const Header = () => {
       {/* hidden menu (mobile only) */}
       <div
         className={clsx(
-          "absolute z-5 flex flex-col gap-8 left-0 w-full py-10 bg-gray-200 transition-all lg:hidden",
+          "absolute z-5 flex flex-col gap-8 left-0 w-full py-10 bg-gray-200 transition-all shadow-md lg:hidden",
           isToggled ? "top-full" : "-top-[100rem]"
         )}
       >
