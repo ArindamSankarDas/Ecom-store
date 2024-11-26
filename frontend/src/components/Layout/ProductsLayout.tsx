@@ -1,6 +1,6 @@
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { Outlet, NavLink } from "react-router-dom";
 
 import {
   DropdownMenu,
@@ -8,7 +8,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@components/ui/dropdown-menu";
-import clsx from "clsx";
 
 const ProductsLayout = () => {
   const fetchCategoriesListRef = useRef(false);
@@ -18,7 +17,6 @@ const ProductsLayout = () => {
   const [showRightArrow, setShowRightArrow] = useState(false);
   const [activeOption, setActiveOption] = useState({
     selectDownItem: "all",
-    selectCategoryItem: "all",
   });
   const [categoryList, setCategoryList] = useState<string[]>([]);
 
@@ -118,25 +116,35 @@ const ProductsLayout = () => {
               className='self-start flex items-center text-nowrap gap-3 overflow-x-auto no-scrollbar'
             >
               {categoryList.map((elem, index) => (
-                <span
-                  id='carousel-item'
-                  ref={carouselItemRef}
-                  onClick={() =>
-                    setActiveOption((prevActiveState) => ({
-                      ...prevActiveState,
-                      selectCategoryItem: elem,
-                    }))
-                  }
-                  className={clsx(
-                    "inline-block capitalize text-sm font-semibold rounded-2xl px-3 py-1  transition-all",
-                    elem === activeOption.selectCategoryItem
-                      ? "bg-black text-white"
-                      : "hover:cursor-pointer hover:bg-black hover:text-white"
-                  )}
+                <NavLink
                   key={index}
+                  to={elem === "all" ? "/products/all" : `/products/${elem}`}
                 >
-                  {elem}
-                </span>
+                  {({ isActive }) => {
+                    return isActive ? (
+                      <span
+                        id='carousel-item'
+                        ref={carouselItemRef}
+                        className={
+                          "inline-block capitalize text-sm font-semibold rounded-2xl px-3 py-1 transition-all bg-black text-white"
+                        }
+                      >
+                        {elem}
+                      </span>
+                    ) : (
+                      <span
+                        id='carousel-item'
+                        ref={carouselItemRef}
+                        className={
+                          "inline-block capitalize text-sm font-semibold rounded-2xl px-3 py-1 transition-all hover:cursor-pointer hover:bg-black hover:text-white"
+                        }
+                        key={index}
+                      >
+                        {elem}
+                      </span>
+                    );
+                  }}
+                </NavLink>
               ))}
             </div>
           </div>

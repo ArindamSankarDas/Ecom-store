@@ -4,14 +4,8 @@ import Card from "@components/Card/Card";
 import { ProductItem } from "@/lib/types";
 
 import { ButtonLoading } from "@/components/ui/custom-buttons";
-import { useOutletContext } from "react-router-dom";
 
-const ProductsPage = () => {
-  const { selectCategoryItem } = useOutletContext<{
-    selectDownItem: string;
-    selectCategoryItem: string;
-  }>();
-
+const ProductsPage = ({ currentPath }: { currentPath: string }) => {
   const didFetchRef = useRef(false);
   const [loading, setLoading] = useState({
     pageLoading: false,
@@ -34,8 +28,6 @@ const ProductsPage = () => {
       const response = await fetch(`${url}&skip=${count}`);
       const result = await response.json();
 
-      console.log(result.products);
-
       if (!newCategory) {
         setProducts((prevProducts) => [...prevProducts, ...result.products]);
       } else {
@@ -56,9 +48,8 @@ const ProductsPage = () => {
       fetchProductItems(
         "https://dummyjson.com/products?limit=11&select=title,price,thumbnail,category",
         skipCount,
-        true
+        false
       );
-
       return () => {
         didFetchRef.current = true;
       };
@@ -66,30 +57,37 @@ const ProductsPage = () => {
 
     if (didFetchRef.current && skipCount > 0) {
       const categorySelection =
-        selectCategoryItem !== "all"
+        currentPath === "all"
           ? "https://dummyjson.com/products?limit=11&select=title,price,thumbnail,category"
-          : `https://dummyjson.com/products/category/${selectCategoryItem}?limit=11&select=title,price,thumbnail,category`;
+          : `https://dummyjson.com/products/category/${currentPath}?limit=11&select=title,price,thumbnail,category`;
 
       fetchProductItems(categorySelection, skipCount, false);
+
+      return;
     }
 
-    if (didFetchRef.current && selectCategoryItem !== "all") {
+    if (didFetchRef.current && currentPath !== "all") {
       setSkipCount(0);
       fetchProductItems(
-        `https://dummyjson.com/products/category/${selectCategoryItem}?limit=10&select=title,price,thumbnail,category`,
+        `https://dummyjson.com/products/category/${currentPath}?limit=10&select=title,price,thumbnail,category`,
         skipCount,
         true
       );
+
+      return;
     }
 
-    if (didFetchRef.current && selectCategoryItem === "all") {
+    if (didFetchRef.current && currentPath === "all") {
+      setSkipCount(0);
       fetchProductItems(
-        "https://dummyjson.com/products?limit=11&select=title,price,thumbnail,category",
+        `https://dummyjson.com/products?limit=11&select=title,price,thumbnail,category`,
         skipCount,
         true
       );
+
+      return;
     }
-  }, [selectCategoryItem, skipCount]);
+  }, [currentPath, skipCount]);
 
   return (
     <>
@@ -121,7 +119,7 @@ const ProductsPage = () => {
             ) : (
               <button
                 className='mt-10 mb-7 relative left-1/2 -translate-x-1/2 bg-black text-white px-3 py-1 rounded-md font-semibold border-2 border-black transition-all hover:bg-white hover:text-black active:text-white active:bg-black'
-                onClick={() => setSkipCount((prevCount) => prevCount + 10)}
+                onClick={() => setSkipCount((prevCount) => prevCount + 11)}
               >
                 Load more
               </button>
