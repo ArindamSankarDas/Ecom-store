@@ -11,13 +11,15 @@ const Card = ({
       id='product-card'
       className='flex flex-col border-2 pb-4 rounded-md'
     >
-      <img
-        src={itemPic}
-        alt='test image'
-        width={"100%"}
-        height={"auto"}
-        className='border-b'
-      />
+      <div id='item-image-container' className='border-b overflow-hidden'>
+        <img
+          src={itemPic}
+          alt='image of the product'
+          width={"100%"}
+          height={"auto"}
+          className='transition-all hover:scale-125'
+        />
+      </div>
 
       <div id='product-details' className='mt-10 flex justify-between px-6'>
         <div id='product-headers'>
@@ -30,7 +32,10 @@ const Card = ({
         </p>
       </div>
 
-      <button className='mt-5 bg-black text-white px-2 py-2 mx-3 rounded-md transition-all border border-black hover:bg-white hover:text-black hover:border-gray-300 font-semibold active:bg-black active:text-white'>
+      <button
+        id='add-to-cart'
+        className='mt-5 bg-black text-white px-2 py-2 mx-3 rounded-md transition-all border border-black hover:bg-white hover:text-black hover:border-gray-300 font-semibold active:bg-black active:text-white'
+      >
         Add to Cart
       </button>
     </article>
