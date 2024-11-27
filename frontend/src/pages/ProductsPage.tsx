@@ -4,8 +4,11 @@ import Card from "@components/Card/Card";
 import { ProductItem } from "@/lib/types";
 
 import { ButtonLoading } from "@/components/ui/custom-buttons";
+import { Outlet, useParams } from "react-router-dom";
 
 const ProductsPage = ({ currentPath }: { currentPath: string }) => {
+  const { id } = useParams();
+
   const didFetchRef = useRef(false);
   const [loading, setLoading] = useState({
     pageLoading: false,
@@ -91,40 +94,45 @@ const ProductsPage = ({ currentPath }: { currentPath: string }) => {
 
   return (
     <>
-      {loading.pageLoading ? (
-        <section className='w-fit absolute top-[45%] -translate-y-1/2 left-1/2 -translate-x-1/2'>
-          <div
-            className='animate-spin inline-block size-24 border-[6px] border-current border-t-transparent text-blue-600 rounded-full'
-            role='status'
-            aria-label='loading'
-          ></div>
-        </section>
-      ) : (
-        <section>
-          <div className='card-container p-5'>
-            {products &&
-              products.map((productItem, index) => (
-                <Card
-                  key={index}
-                  itemPrice={productItem.price}
-                  itemPic={productItem.thumbnail}
-                  itemTitle={productItem.title}
-                  itemCategory={productItem.category}
-                />
+      {!id ? (
+        loading.pageLoading ? (
+          <section className='w-fit absolute top-[45%] -translate-y-1/2 left-1/2 -translate-x-1/2'>
+            <div
+              className='animate-spin inline-block size-24 border-[6px] border-current border-t-transparent text-blue-600 rounded-full'
+              role='status'
+              aria-label='loading'
+            ></div>
+          </section>
+        ) : (
+          <section>
+            <div className='card-container p-5'>
+              {products &&
+                products.map((productItem) => (
+                  <Card
+                    key={productItem.id}
+                    itemId={productItem.id}
+                    itemPrice={productItem.price}
+                    itemPic={productItem.thumbnail}
+                    itemTitle={productItem.title}
+                    itemCategory={productItem.category}
+                  />
+                ))}
+            </div>
+            {!(products.length < 11) &&
+              (loading.buttonLoading ? (
+                <ButtonLoading>Please wait</ButtonLoading>
+              ) : (
+                <button
+                  className='mt-10 mb-7 relative left-1/2 -translate-x-1/2 bg-black text-white px-3 py-1 rounded-md font-semibold border-2 border-black transition-all hover:bg-white hover:text-black active:text-white active:bg-black'
+                  onClick={() => setSkipCount((prevCount) => prevCount + 11)}
+                >
+                  Load more
+                </button>
               ))}
-          </div>
-          {!(products.length < 11) &&
-            (loading.buttonLoading ? (
-              <ButtonLoading>Please wait</ButtonLoading>
-            ) : (
-              <button
-                className='mt-10 mb-7 relative left-1/2 -translate-x-1/2 bg-black text-white px-3 py-1 rounded-md font-semibold border-2 border-black transition-all hover:bg-white hover:text-black active:text-white active:bg-black'
-                onClick={() => setSkipCount((prevCount) => prevCount + 11)}
-              >
-                Load more
-              </button>
-            ))}
-        </section>
+          </section>
+        )
+      ) : (
+        <Outlet />
       )}
     </>
   );
