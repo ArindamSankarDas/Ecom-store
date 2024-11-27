@@ -7,6 +7,7 @@ export type ProductItem = {
 };
 
 export type ProductCardProps = {
+  itemId: number;
   itemPrice: number;
   itemPic: string;
   itemTitle: string;
