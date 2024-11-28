@@ -13,3 +13,17 @@ export type ProductCardProps = {
   itemTitle: string;
   itemCategory: string;
 };
+
+export type ProductItemPageDetails = {
+  images: string[];
+  title: string;
+  reviews: {
+    rating: number;
+  }[];
+  availabilityStatus: "In Stock" | "Low Stock" | "No Stock";
+  price: number;
+  description: string;
+  returnPolicy: string;
+  warrantyInformation: string;
+  shippingInformation: string;
+};
