@@ -59,7 +59,7 @@ const ProductsLayout = ({ categoryList }: { categoryList: string[] }) => {
   };
 
   return (
-    <main className='relative flex-1 border'>
+    <main id='products-layout' className='relative flex-1 border'>
       {!id && (
         <header
           id='sub-header'
