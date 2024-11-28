@@ -59,7 +59,7 @@ const ProductsLayout = ({ categoryList }: { categoryList: string[] }) => {
   };
 
   return (
-    <main id='products-layout' className='relative flex-1 border'>
+    <main id='products-layout' className='relative flex-1 flex flex-col justify-center'>
       {!id && (
         <header
           id='sub-header'
