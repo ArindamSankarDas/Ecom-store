@@ -7,7 +7,6 @@ import ProductsLayout from "@components/Layout/ProductsLayout";
 import HomePage from "@pages/HomePage";
 import ContactPage from "@pages/ContactPage";
 import CartPage from "@pages/CartPage";
-import WishlistPage from "@pages/WishlistPage";
 import LoginPage from "@pages/LoginPage";
 import ProductsPage from "@pages/ProductsPage";
 import ProductItemPage from "@pages/ProductItemPage";
@@ -67,8 +66,6 @@ const App = () => {
         <Route path='contact' element={<ContactPage />} />
         {/* Routes to the cart when clicked on, i.e. CartPage(/cart) */}
         <Route path='cart' element={<CartPage />} />
-        {/* Routes to the wishlist when clicked on, i.e. WishlistPage(/wishlist) */}
-        <Route path='wishlist' element={<WishlistPage />} />
         {/* Routes to the login when clicked on, i.e. LoginPage(/login) */}
         <Route path='login' element={<LoginPage />} />
       </Route>

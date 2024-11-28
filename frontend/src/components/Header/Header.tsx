@@ -1,6 +1,6 @@
 import { useState } from "react";
 import clsx from "clsx";
-import { ChevronRight, Heart, Menu, Search, ShoppingCart } from "lucide-react";
+import { ChevronRight, Menu, Search, ShoppingCart } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const Header = () => {
@@ -51,7 +51,7 @@ const Header = () => {
           </NavLink>
         </nav>
 
-        {/* cart, wishlist and login box, search in desk */}
+        {/* cart and login box, search in desk */}
         <div className='flex justify-around items-center gap-4'>
           {/* desk search */}
           <div className='hidden mr-10 lg:block relative w-[300px] self-center'>
@@ -69,20 +69,6 @@ const Header = () => {
               strokeWidth={3}
             />
           </div>
-
-          {/* wishlist */}
-          <NavLink
-            to={"/wishlist"}
-            className='relative top-[0%] cursor-pointer transition-all hover:-top-[10%] hover:scale-105'
-          >
-            {({ isActive }) =>
-              isActive ? (
-                <Heart size={22} fill='red' strokeWidth={0} />
-              ) : (
-                <Heart size={22} />
-              )
-            }
-          </NavLink>
 
           {/* shopping cart */}
           <div className='relative top-[0%] cursor-pointer select-none transition-all hover:-top-[10%]'>
