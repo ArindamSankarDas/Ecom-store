@@ -3,10 +3,10 @@ import Input from "@components/Input/Input";
 
 const ContactPage = () => {
   return (
-    <main className='border flex-1 flex flex-col items-center justify-center gap-7 lg:flex-row lg:px-5'>
+    <main className='border flex-1 py-5 flex flex-col items-center justify-center gap-7 lg:flex-row lg:px-10'>
       <section
         id='text-info'
-        className='border p-8 shadow space-y-8 rounded-lg'
+        className='border mx-6 p-8 shadow space-y-8 rounded-lg'
       >
         <section id='call-support' className='space-y-4'>
           <div className='flex items-center gap-2'>
@@ -43,7 +43,12 @@ const ContactPage = () => {
         <form className='grid-form' onSubmit={(e) => e.preventDefault()}>
           <Input inputType='text' inputHolder='Your name' />
           <Input inputType='email' inputHolder='Your Email' />
-          <textarea cols={20} rows={5} placeholder='Your Message' className='resize-none border'></textarea>
+          <textarea
+            cols={20}
+            rows={5}
+            placeholder='Your Message'
+            className='resize-none border'
+          ></textarea>
         </form>
         <button
           type='submit'
