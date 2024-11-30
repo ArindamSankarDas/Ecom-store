@@ -96,7 +96,7 @@ const ProductsLayout = ({ categoryList }: { categoryList: string[] }) => {
                 {categoryList.map((elem, index) => (
                   <NavLink
                     key={index}
-                    to={elem === "all" ? "/products/all" : `/products/${elem}`}
+                    to={elem === "all" ? "/shop/all" : `/shop/${elem}`}
                   >
                     {({ isActive }) =>
                       isActive ? (

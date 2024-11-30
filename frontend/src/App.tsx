@@ -8,7 +8,7 @@ import HomePage from "@pages/HomePage";
 import ContactPage from "@pages/ContactPage";
 import CartPage from "@pages/CartPage";
 import LoginPage from "@pages/LoginPage";
-import ProductsPage from "@pages/ProductsPage";
+import ShopPage from "@pages/ShopPage";
 import ProductItemPage from "@pages/ProductItemPage";
 
 const App = () => {
@@ -43,21 +43,21 @@ const App = () => {
       <Route path='/' element={<AppLayout />}>
         {/* Routes to the main page on load, i.e. HomePage(/) */}
         <Route index element={<HomePage />} />
-        {/* Routes to the Products(/products) route which has another layout on top of AppLayout  */}
+        {/* Routes to the Products(/shop) route which has another layout on top of AppLayout  */}
         <Route
-          path='products'
+          path='shop'
           element={<ProductsLayout categoryList={categoryList} />}
         >
-          {/* Reroutes it to /products/all using Navigate to replace the history stack  */}
+          {/* Reroutes it to /shop/all using Navigate to replace the history stack  */}
           <Route index element={<Navigate to='all' replace />} />
-          {/* Dynamic routing of the product category(/products/category) which is received from the categoryList */}
+          {/* Dynamic routing of the product category(/shop/category) which is received from the categoryList */}
           {categoryList.map((routeElem, index) => (
             <Route
               key={index}
               path={routeElem}
-              element={<ProductsPage currentPath={routeElem} />}
+              element={<ShopPage currentPath={routeElem} />}
             >
-              {/* Route for single product(/products/category/:id) items using product id  */}
+              {/* Route for single product(/shop/category/:id) items using product id  */}
               <Route index path=':id' element={<ProductItemPage />} />
             </Route>
           ))}

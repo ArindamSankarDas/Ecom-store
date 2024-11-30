@@ -38,10 +38,10 @@ const Header = () => {
             Home
           </NavLink>
           <NavLink
-            to='/products'
+            to='/shop'
             className={({ isActive }) => (isActive ? "stopHover" : "")}
           >
-            Products
+            Shop
           </NavLink>
           <NavLink
             to='/contact'
@@ -134,10 +134,10 @@ const Header = () => {
           <span
             onClick={() => {
               setIsToggled(false);
-              navigate("/products");
+              navigate("/shop");
             }}
           >
-            Products
+            Shop
             <ChevronRight />
           </span>
           <span

@@ -1,7 +1,7 @@
 import { ProductCardProps } from "@lib/types";
 import { Link } from "react-router-dom";
 
-const Card = ({
+const ProductCard = ({
   itemId,
   itemPrice,
   itemPic,
@@ -25,7 +25,7 @@ const Card = ({
 
       <div id='product-details' className='mt-10 flex justify-between px-6'>
         <div id='product-headers'>
-          <Link to={`/products/${itemCategory}/${itemId}`}>
+          <Link to={`/shop/${itemCategory}/${itemId}`}>
             <h2 className='font-semibold text-xl hover:cursor-pointer'>
               {itemTitle}
             </h2>
@@ -48,4 +48,4 @@ const Card = ({
     </article>
   );
 };
-export default Card;
+export default ProductCard;

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 
-import Card from "@components/Card/Card";
+import Card from "@/components/ProductCard/ProductCard";
 import { ProductItem } from "@/lib/types";
 
 import { ButtonLoading } from "@/components/ui/custom-buttons";
 import { Outlet, useParams } from "react-router-dom";
 
-const ProductsPage = ({ currentPath }: { currentPath: string }) => {
+const ShopPage = ({ currentPath }: { currentPath: string }) => {
   const { id } = useParams();
 
   const didFetchRef = useRef(false);
@@ -137,4 +137,4 @@ const ProductsPage = ({ currentPath }: { currentPath: string }) => {
     </>
   );
 };
-export default ProductsPage;
+export default ShopPage;
