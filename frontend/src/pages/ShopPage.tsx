@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
-import Card from "@/components/ProductCard/ProductCard";
+import ProductCard from "@components/ProductCard/ProductCard";
 import { ProductItem } from "@/lib/types";
 
-import { ButtonLoading } from "@/components/ui/custom-buttons";
+import { ButtonLoading } from "@components/ui/custom-buttons";
 import { Outlet, useParams } from "react-router-dom";
 
 const ShopPage = ({ currentPath }: { currentPath: string }) => {
@@ -108,7 +108,7 @@ const ShopPage = ({ currentPath }: { currentPath: string }) => {
             <div className='card-container p-5'>
               {products &&
                 products.map((productItem) => (
-                  <Card
+                  <ProductCard
                     key={productItem.id}
                     itemId={productItem.id}
                     itemPrice={productItem.price}
