@@ -5,7 +5,7 @@ import HeroSection from "@components/HeroSection/HeroSection";
 import ProductGrid from "@components/ProductGrid/ProductGrid";
 
 import featuredData from "@lib/data.json";
-import ProductCard from "@/components/ProductCard/ProductCard";
+import ProductCard from "@components/ProductCard/ProductCard";
 
 const HomePage = () => {
   const { featuredCategories, featuredProducts } = featuredData;

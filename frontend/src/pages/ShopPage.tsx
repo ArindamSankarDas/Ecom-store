@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import ProductCard from "@components/ProductCard/ProductCard";
-import { ProductItem } from "@/lib/types";
+import { ProductItem } from "@lib/types";
 
 import { ButtonLoading } from "@components/ui/custom-buttons";
 import { Outlet, useParams } from "react-router-dom";

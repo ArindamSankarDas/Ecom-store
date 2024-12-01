@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Minus, Plus, RefreshCw, Star, Truck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ProductItemPageDetails } from "@/lib/types";
+import { ProductItemPageDetails } from "@lib/types";
 
 const ProductItemPage = () => {
   const { id } = useParams();
