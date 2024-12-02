@@ -26,7 +26,7 @@ const ProductCard = ({
       <div id='product-details' className='mt-10 flex justify-between px-6'>
         <div id='product-headers'>
           <Link to={`/shop/${itemCategory}/${itemId}`}>
-            <h2 className='font-semibold text-xl hover:cursor-pointer'>
+            <h2 className='font-semibold text-xl hover:cursor-pointer hover:underline'>
               {itemTitle}
             </h2>
           </Link>
