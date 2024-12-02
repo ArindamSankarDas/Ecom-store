@@ -10,6 +10,7 @@ import CartPage from "@pages/CartPage";
 import LoginPage from "@pages/LoginPage";
 import ShopPage from "@pages/ShopPage";
 import ProductItemPage from "@pages/ProductItemPage";
+import SignUpPage from '@pages/SignUpPage';
 
 const App = () => {
   const fetchCategoriesListRef = useRef(false);
@@ -68,6 +69,8 @@ const App = () => {
         <Route path='cart' element={<CartPage />} />
         {/* Routes to the login when clicked on, i.e. LoginPage(/login) */}
         <Route path='login' element={<LoginPage />} />
+        {/* Routes to the signup when clicked on, i.e. SignUpPage(/signup) */}
+        <Route path='signup' element={<SignUpPage />} />
       </Route>
     </Routes>
   );
