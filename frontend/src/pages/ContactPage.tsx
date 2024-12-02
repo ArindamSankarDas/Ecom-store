@@ -49,6 +49,7 @@ const ContactPage = () => {
           <Input
             type='email'
             placeholder='Your Email'
+            autoComplete='off'
             className='py-6 bg-gray-100 placeholder:text-gray-400'
           />
           <textarea
