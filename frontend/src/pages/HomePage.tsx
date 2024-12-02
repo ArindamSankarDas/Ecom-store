@@ -17,8 +17,8 @@ const HomePage = () => {
         <div className='container mx-auto px-4 lg:px-20'>
           <h2 className='text-3xl font-bold mb-8'>Featured Categories</h2>
           <div className='grid grid-cols-2 md:grid-cols-4 gap-6'>
-            {featuredCategories.map((category) => (
-              <Link key={category.name} to={`/shop/${category.name}`}>
+            {featuredCategories.map((category, index) => (
+              <Link key={index} to={`/shop/${category.name}`}>
                 <Card>
                   <CardContent className='p-4'>
                     <div className='aspect-square relative mb-4'>
@@ -40,8 +40,9 @@ const HomePage = () => {
       <section className='px-10'>
         <h2 className='text-3xl font-bold mb-5'>Featured Products</h2>
         <ProductGrid>
-          {featuredProducts.map((productItem) => (
+          {featuredProducts.map((productItem, index) => (
             <ProductCard
+              key={index}
               itemId={productItem.id}
               itemCategory={productItem.category}
               itemPic={productItem.thumbnail}
