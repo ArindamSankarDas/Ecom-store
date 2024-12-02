@@ -96,12 +96,14 @@ const ShopPage = ({ currentPath }: { currentPath: string }) => {
     <>
       {!id ? (
         loading.pageLoading ? (
-          <section className='w-fit absolute top-[45%] -translate-y-1/2 left-1/2 -translate-x-1/2'>
-            <div
-              className='animate-spin inline-block size-24 border-[6px] border-current border-t-transparent text-blue-600 rounded-full'
-              role='status'
-              aria-label='loading'
-            ></div>
+          <section className='w-full h-[70vh] relative'>
+            <div className='absolute left-[50%] -translate-x-1/2 top-[50%] -translate-y-1/2'>
+              <div
+                className='animate-spin inline-block size-24 border-[6px] border-current border-t-transparent text-blue-600 rounded-full'
+                role='status'
+                aria-label='loading'
+              ></div>
+            </div>
           </section>
         ) : (
           <section>
