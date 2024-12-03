@@ -6,12 +6,10 @@ export type ProductItem = {
   category: string;
 };
 
-export type ProductCardProps = {
-  itemId: number;
-  itemPrice: number;
-  itemPic: string;
-  itemTitle: string;
-  itemCategory: string;
+export type SearchItem = {
+  id: number;
+  title: string;
+  category: string;
 };
 
 export type ProductItemPageDetails = {

@@ -1,15 +1,52 @@
 import { useState } from "react";
-import clsx from "clsx";
-import { ChevronRight, Menu, Search, ShoppingCart } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
-const Header = () => {
-  const [isToggled, setIsToggled] = useState(false);
+import clsx from "clsx";
+import { ChevronRight, Menu, Search, ShoppingCart } from "lucide-react";
 
+import SearchBox from "@components/Search/SearchBox";
+import SearchSuggestions from "@/components/Search/SearchSuggestions";
+
+const Header = () => {
   const navigate = useNavigate();
 
+  const [isToggled, setIsToggled] = useState(false);
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  const [searchInputValue, setSearchInputValue] = useState("");
+
+  const fetchSuggestions = async (query: string) => {
+    const reponse = await fetch(
+      `https://dummyjson.com/products/search?q=${query}&select=id,title,category`
+    );
+
+    if (!reponse.ok) {
+      throw new Error("Something went wrong");
+    }
+
+    const result = await reponse.json();
+
+    return result.products;
+  };
+
   return (
-    <header className='sticky z-20 bg-white top-0 left-0 w-full'>
+    <header className='w-full sticky z-20 bg-white top-0 left-0 border-b border-black'>
+      {/* search box */}
+      <SearchBox
+        searchToggle={isSearchActive}
+        searchValue={searchInputValue}
+        handleSearchToggle={setIsSearchActive}
+        handleSearchInputValue={setSearchInputValue}
+      />
+
+      {/* search suggestions */}
+      <SearchSuggestions
+        searchValue={searchInputValue}
+        searchToggle={isSearchActive}
+        handleSearchToggle={setIsSearchActive}
+        handleSearchInputValue={setSearchInputValue}
+        fetchSuggestions={fetchSuggestions}
+      />
+
       {/* header display */}
       <section className='relative z-10 bg-white border-b-2 border-gray-500 flex justify-between items-center px-6 py-3 lg:justify-around'>
         {/* logo and burger */}
@@ -51,27 +88,18 @@ const Header = () => {
           </NavLink>
         </nav>
 
-        {/* cart and login box, search in desk */}
-        <div className='flex justify-around items-center gap-4'>
-          {/* desk search */}
-          <div className='hidden mr-10 lg:block relative w-[300px] self-center'>
-            <input
-              className='w-full text-base px-3 py-2 text-black bg-[#F5F5F5] rounded-md placeholder:text-gray-600 placeholder:font-semibold placeholder:text-sm'
-              type='search'
-              name='searchBox'
-              id='searchBox'
-              placeholder='What are you looking for?'
-            />
-
-            <Search
-              className='absolute top-1/2 right-2 -translate-y-1/2'
-              size={22}
-              strokeWidth={3}
-            />
-          </div>
+        {/* cart, login and search */}
+        <div className='flex justify-around items-center gap-3 md:gap-6'>
+          {/* search button */}
+          <button
+            className='p-1 lg:p-2 bg-neutral-100 rounded-full hover:cursor-pointer hover:bg-neutral-200 active:bg-neutral-100'
+            onClick={() => setIsSearchActive(true)}
+          >
+            <Search />
+          </button>
 
           {/* shopping cart */}
-          <div className='relative top-[0%] cursor-pointer select-none transition-all hover:-top-[10%]'>
+          <div className='relative z-2 top-[0%] cursor-pointer select-none transition-all hover:-top-[10%]'>
             <span className='absolute -top-2 -right-2 text-[12px] bg-red-600 font-semibold text-white py-[0.90px] px-[6px] rounded-full'>
               6
             </span>
@@ -99,29 +127,12 @@ const Header = () => {
       {/* hidden menu (mobile only) */}
       <div
         className={clsx(
-          "absolute z-5 flex flex-col gap-8 left-0 w-full py-10 bg-gray-200 transition-all shadow-md lg:hidden",
+          "absolute z-5 left-0 w-full py-5 bg-gray-200 transition-all shadow-md lg:hidden",
           isToggled ? "top-full" : "-top-[100rem]"
         )}
       >
-        {/* search box */}
-        <div className='relative w-4/5 self-center'>
-          <input
-            className='w-full text-lg px-3 py-2 rounded-md placeholder:italic'
-            type='search'
-            name='searchBox'
-            id='searchBox'
-            placeholder='What are you looking for?'
-          />
-
-          <Search
-            className='absolute top-1/2 right-4 -translate-y-1/2'
-            size={26}
-            strokeWidth={3}
-          />
-        </div>
-
         {/* menu items */}
-        <nav className='flex flex-col justify-center px-6 gap-y-1 nav-menu'>
+        <nav className='flex flex-col justify-center px-6 gap-4 nav-menu'>
           <span
             onClick={() => {
               setIsToggled(false);
