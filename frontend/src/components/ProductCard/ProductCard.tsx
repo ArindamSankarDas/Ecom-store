@@ -1,13 +1,21 @@
-import { ProductCardProps } from "@lib/types";
+import React from "react";
 import { Link } from "react-router-dom";
 
-const ProductCard = ({
+type Props = {
+  itemId: number;
+  itemPrice: number;
+  itemPic: string;
+  itemTitle: string;
+  itemCategory: string;
+};
+
+const ProductCard: React.FC<Props> = ({
   itemId,
   itemPrice,
   itemPic,
   itemTitle,
   itemCategory,
-}: ProductCardProps) => {
+}) => {
   return (
     <article
       id='product-card'
