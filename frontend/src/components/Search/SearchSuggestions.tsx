@@ -51,7 +51,9 @@ const SearchSuggestions: React.FC<Props> = ({
       <section
         className={clsx(
           "search-dropdown",
-          searchValue.length > 1 ? "px-4 py-2 border-2" : "p-0"
+          searchValue.length > 1 &&
+            "px-4 py-2 border-2 overflow-x-hidden overflow-y-scroll",
+          suggestions.length && "h-64"
         )}
       >
         {loading ? (

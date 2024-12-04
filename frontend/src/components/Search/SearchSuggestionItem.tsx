@@ -25,7 +25,7 @@ const SearchSuggestionItem: React.FC<Props> = ({
 
   return (
     <div
-      className='bg-white px-2 py-1 rounded-sm transition-all hover:scale-105  hover:text-white hover:bg-black hover:cursor-pointer'
+      className='bg-white px-2 py-1 rounded-sm transition-all hover:scale-[1.02]  hover:text-white hover:bg-black hover:cursor-pointer'
       onClick={handleSearchSuggestionClick}
     >
       <h3 className='font-medium'>{itemTitle}</h3>

@@ -58,7 +58,10 @@ const Header = () => {
               "cursor-pointer transition-all lg:hidden",
               isToggled ? "rotate-90" : "rotate-0"
             )}
-            onClick={() => setIsToggled(!isToggled)}
+            onClick={() => {
+              setSearchInputValue("");
+              setIsToggled(!isToggled);
+            }}
           />
           {/* logo */}
           <h1 className='text-xl font-bold text-white bg-black px-1 select-none lg:text-2xl'>
