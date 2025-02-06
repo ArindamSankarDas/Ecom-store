@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "dev": "node -r dotenv/config --watch-path=./src .",
+    "dev": "node -r dotenv/config --watch-path=./src --watch-preserve-output .",
     "start": "node ."
   },
   "keywords": [
@@ -16,9 +16,11 @@
   "license": "ISC",
   "description": "Backend implementation of the e-commerce application",
   "dependencies": {
+    "@prisma/client": "^6.3.1",
     "express": "^4.21.2"
   },
   "devDependencies": {
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "prisma": "^6.3.1"
   }
 }
