@@ -1,21 +1,28 @@
 import productsData from "../utils/data.json" with {type: "json"};
 
+export function getProducts(req, _res, next) {
+  req.filteredData = productsData;
+  next();
+}
 
-export function getProducts(req, res){
-  const { limit = 30 } = req.query;	
+export function getProductItem(req, _res, next){
+    const findData = productsData.find(function (product) {
+      return product.id === parseInt(req.params.productId)
+    });
 
-  const queriedProductLength = parseInt(limit) === 0 ? productsData : productsData.filter(function (product) {
-      return product.id <= parseInt(limit);
+    req.filteredData = findData;
+    next();
+}
+
+export function getCategoryList(req, res){
+  
+  let fetchedCategories = {};
+
+  productsData.forEach(function (product) {
+    if(!(product.category in fetchedCategories)){
+      fetchedCategories[product.category] = 1;
+    }
   });
 
-  const dataObj = {
-    products: queriedProductLength,
-    total: productsData.length,
-	 mode: "development",
-    skip: 0,
-    limit: queriedProductLength.length,
-  };
-
-  res.status(200).json(dataObj);
-
+  res.status(200).json(Object.keys(fetchedCategories));
 }

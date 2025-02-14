@@ -19,9 +19,7 @@ const ProductItemPage = () => {
 
   const fetchProductDetails = async (productId: string | undefined) => {
     try {
-      const response = await fetch(
-        `https://dummyjson.com/products/${productId}`
-      );
+      const response = await fetch(`http://localhost:3000/${productId}`);
 
       const result = await response.json();
       setProductDetails(result);

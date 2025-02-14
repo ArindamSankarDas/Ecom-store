@@ -49,7 +49,7 @@ const ShopPage = ({ currentPath }: { currentPath: string }) => {
   useEffect(() => {
     if (!didFetchRef.current) {
       fetchProductItems(
-        "https://dummyjson.com/products?limit=11&select=title,price,thumbnail,category",
+        "http://localhost:3000?limit=11&select=title,price,thumbnail,category",
         skipCount,
         false
       );
@@ -61,8 +61,8 @@ const ShopPage = ({ currentPath }: { currentPath: string }) => {
     if (didFetchRef.current && skipCount > 0) {
       const categorySelection =
         currentPath === "all"
-          ? "https://dummyjson.com/products?limit=11&select=title,price,thumbnail,category"
-          : `https://dummyjson.com/products/category/${currentPath}?limit=11&select=title,price,thumbnail,category`;
+          ? "http://localhost:3000?limit=11&select=title,price,thumbnail,category"
+          : `http://localhost:3000/category/${currentPath}?limit=11&select=title,price,thumbnail,category`;
 
       fetchProductItems(categorySelection, skipCount, false);
 
@@ -72,7 +72,7 @@ const ShopPage = ({ currentPath }: { currentPath: string }) => {
     if (didFetchRef.current && currentPath !== "all") {
       setSkipCount(0);
       fetchProductItems(
-        `https://dummyjson.com/products/category/${currentPath}?limit=10&select=title,price,thumbnail,category`,
+        `http://localhost:3000/category/${currentPath}?limit=10&select=title,price,thumbnail,category`,
         skipCount,
         true
       );
@@ -83,7 +83,7 @@ const ShopPage = ({ currentPath }: { currentPath: string }) => {
     if (didFetchRef.current && currentPath === "all") {
       setSkipCount(0);
       fetchProductItems(
-        `https://dummyjson.com/products?limit=11&select=title,price,thumbnail,category`,
+        `http://localhost:3000?limit=11&select=title,price,thumbnail,category`,
         skipCount,
         true
       );

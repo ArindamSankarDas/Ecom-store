@@ -10,16 +10,14 @@ import CartPage from "@pages/CartPage";
 import LoginPage from "@pages/LoginPage";
 import ShopPage from "@pages/ShopPage";
 import ProductItemPage from "@pages/ProductItemPage";
-import SignUpPage from '@pages/SignUpPage';
+import SignUpPage from "@pages/SignUpPage";
 
 const App = () => {
   const fetchCategoriesListRef = useRef(false);
   const [categoryList, setCategoryList] = useState<string[]>([]);
   const fetchCategoriesList = async () => {
     try {
-      const response = await fetch(
-        "https://dummyjson.com/products/category-list"
-      );
+      const response = await fetch("http://localhost:3000/category-list");
 
       const result = await response.json();
 

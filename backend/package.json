@@ -4,8 +4,8 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-	 "dev": "node -r dotenv/config --watch-path=./src --watch-preserve-output .",
-    "start": "node ."
+    "dev": "node -r dotenv/config --watch-path=./src --watch-preserve-output .",
+    "start": "node -r dotenv/config ."
   },
   "keywords": [
     "node",
@@ -17,6 +17,7 @@
   "description": "Backend implementation of the e-commerce application",
   "dependencies": {
     "@prisma/client": "^6.3.1",
+    "cors": "^2.8.5",
     "express": "^4.21.2"
   },
   "devDependencies": {
