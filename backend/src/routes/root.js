@@ -8,9 +8,8 @@ import queryParser from "../middlewares/queryParser.js";
 
 const router = Router();
 
-router
-  .get("/", getProducts, queryParser)
-  .get("/category-list", getCategoryList)
-  .get("/:productId", getProductItem, queryParser);
+router.route("/").get(getProducts, queryParser);
+router.route("/:productId").get(getProductItem, queryParser);
+router.route("/category-list").get(getCategoryList);
 
 export default router;

@@ -3,7 +3,7 @@ import { stat, mkdir, appendFile } from "node:fs/promises";
 import { logGenerator } from "../utils/logGenerator.js";
 import { randomUUID } from "node:crypto";
 
-async function errorLogger(err, req, res) {
+async function errorLogger(err, req, res, _next) {
   try {
     const logsDir = resolve(import.meta.dirname, "..", "logs");
 
@@ -28,7 +28,9 @@ async function errorLogger(err, req, res) {
       res.sendStatus(500);
     });
 
-    res.status(500).json({ message: "Something went wrong" });
+    res
+      .status(err.statusCode || 500)
+      .json({ message: err.message || "Something went wrong" });
   } catch (error) {
     console.error(err);
 

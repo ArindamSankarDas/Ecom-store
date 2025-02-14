@@ -23,10 +23,15 @@ app.use("/", rootRoute);
 app.use("/category", categoryRoute);
 
 // handles 404 routes
-app.all("*", (_req, res) => {
-  res.sendStatus(404);
+app.all("*", (_req, _res, next) => {
+  const err = new Error("NOT FOUND");
+
+  err.statusCode = 404;
+
+  next(err);
 });
 
+// global error handler
 app.use(errorLogger);
 
 // server starts listening on this port

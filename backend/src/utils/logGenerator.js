@@ -5,21 +5,8 @@ export function logGenerator(id, method, path, err = undefined) {
     const errorMessage = err.message || "No error message provided";
     const errorStack = err.stack || "No stack trace provided";
 
-    const requestInfo = {
-      method,
-      path,
-    };
-
-    const logEntry = {
-      timestamp,
-      id,
-      message: errorMessage,
-      stack: errorStack,
-      request: requestInfo,
-    };
-
-    return JSON.stringify(logEntry) + "\n";
+    return `[${timestamp.toISOString()}] [${id}] ${method} ${path} [${errorMessage}] Stack-Trace:${errorStack} \n\n`;
   }
 
-  return `[${timestamp.toISOString()}] [${id}] ${method} ${path}  \n`;
+  return `[${timestamp.toISOString()}] [${id}] ${method} ${path} \n`;
 }

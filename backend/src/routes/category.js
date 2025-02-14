@@ -4,6 +4,6 @@ import queryParser from "../middlewares/queryParser.js";
 
 const router = Router();
 
-router.get("/:productCategory", getCategoryProducts, queryParser);
+router.route("/:productCategory").get(getCategoryProducts, queryParser);
 
 export default router;
