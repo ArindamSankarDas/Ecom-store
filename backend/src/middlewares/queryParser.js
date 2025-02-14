@@ -12,9 +12,14 @@ function selectProps(selectInfo, productData) {
   return newProductObj;
 }
 
-function queryParser(req, res) {
+function queryParser(req, res, next) {
   const fetchedProducts = req.filteredData;
   const { limit = "30", select, skip = "0" } = req.query;
+
+  if (!fetchedProducts) {
+    next();
+    return;
+  }
 
   if (!Array.isArray(fetchedProducts)) {
     const fetchedProduct = selectProps(select, fetchedProducts);

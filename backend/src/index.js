@@ -23,8 +23,8 @@ app.use("/", rootRoute);
 app.use("/category", categoryRoute);
 
 // handles 404 routes
-app.all("/*", (_req, res) => {
-  res.status(404).json({ error: "Route not found" });
+app.all("*", (_req, res) => {
+  res.sendStatus(404);
 });
 
 app.use(errorLogger);

@@ -14,8 +14,7 @@ export function getProductItem(req, _res, next){
     next();
 }
 
-export function getCategoryList(req, res){
-  
+export function getCategoryList(_req, res){
   let fetchedCategories = {};
 
   productsData.forEach(function (product) {

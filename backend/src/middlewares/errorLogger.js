@@ -11,12 +11,12 @@ async function errorLogger(err, req, res) {
       if (statErr.code === "ENOENT") {
         await mkdir(logsDir).catch(function (dirErr) {
           console.error("Error creating directory:", dirErr);
-          res.status(500).send("Internal Server Error");
+          res.sendStatus(500);
         });
       }
 
       console.error("Error checking logs directory:", statErr);
-      res.status(500).send("Internal Server Error");
+      res.sendStatus(500);
     });
 
     const logInfo = logGenerator(randomUUID(), req.method, req.path, err);
@@ -25,14 +25,14 @@ async function errorLogger(err, req, res) {
       encoding: "utf-8",
     }).catch(function (fileCreate_AppendErr) {
       console.error("Error checking logs directory:", fileCreate_AppendErr);
-      res.status(500).send("Internal Server Error");
+      res.sendStatus(500);
     });
 
     res.status(500).json({ message: "Something went wrong" });
   } catch (error) {
     console.error(err);
 
-    res.status(500).send("Internal Server Error");
+    res.sendStatus(500);
   }
 }
 
