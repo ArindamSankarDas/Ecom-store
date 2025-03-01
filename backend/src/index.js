@@ -1,10 +1,14 @@
 import express from "express";
+
 import rootRoute from "./routes/root.js";
 import categoryRoute from "./routes/category.js";
-import requestLogger from "./middlewares/logger.js";
+import searchRoute from "./routes/search.js";
+
+import requestLogger from "./middlewares/reqLogger.js";
+import errorLogger from "./middlewares/errLogger.js";
+
 import cors from "cors";
 import corsOptions from "./config/corsConfig.js";
-import errorLogger from "./middlewares/errorLogger.js";
 
 // initialise the express application
 const app = express();
@@ -21,6 +25,7 @@ app.use(express.json());
 // application routes
 app.use("/", rootRoute);
 app.use("/category", categoryRoute);
+app.use("/search", searchRoute);
 
 // handles 404 routes
 app.all("*", (_req, _res, next) => {

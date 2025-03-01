@@ -16,7 +16,7 @@ const Header = () => {
 
   const fetchSuggestions = async (query: string) => {
     const reponse = await fetch(
-      `https://dummyjson.com/products/search?q=${query}&select=id,title,category`
+      `http://localhost:3000/search?q=${query}&select=id,title,category`
     );
 
     if (!reponse.ok) {
