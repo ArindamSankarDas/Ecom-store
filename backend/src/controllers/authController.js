@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { writeFile } from "node:fs";
 import { join } from "node:path";
 
-export function registerUser(req, res){
+export function registerUser(req, res, next){
 	const { username, email, password } = req.body;
 	
 	if(!username || !email || !password){
@@ -37,7 +37,9 @@ export function registerUser(req, res){
 		}
 	);
 
-	res.status(200).json(req.body);
+	req.body = { username, password	};
+
+	next();
 }
 
 export function loginUser(req, res){
@@ -59,17 +61,17 @@ export function loginUser(req, res){
 		return res.status(401).json({msg: "Invalid Password"});
 	}
 
-	const accessToken = jwt.sign({
-		{"username": foundUser.username},
+	const accessToken = jwt.sign(
+		{ username: foundUser.username},
 		process.env.ACCESS_TOKEN_SECRET,
 		{expiresIn: "15m"}
-	});
+	);
 
-	const refreshToken = jwt.sign({
-		{"username": foundUser.username},
+	const refreshToken = jwt.sign(
+		{ username: foundUser.username },
 		process.env.REFRESH_TOKEN_SECRET,
 		{expiresIn: "30d"}
-	});	
+	);	
 
 	const otherUsers = usersData.users.filter(function(user){
 		return foundUser.username !== user.username;
@@ -93,7 +95,14 @@ export function loginUser(req, res){
 		}
 	)
 
-	res.cookie("jwt", refreshToken, {httpOnly: true, sameSite: "None", maxAge: 30* 24 * 60 * 60 * 1000});
+	res.cookie(
+		"jwt", 
+		refreshToken, 
+		{
+			httpOnly: true, 
+			sameSite: "None", 
+			maxAge: 30 * 24 * 60 * 60 * 1000
+		});
 
 	res.status(201).json({ accessToken });
 }
