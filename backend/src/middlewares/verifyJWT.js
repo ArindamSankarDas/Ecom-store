@@ -1,23 +1,23 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 function verifyJWT(req, res, next) {
-  const authorization = req.headers["authorization"];
+	const authorization = req.headers['authorization'];
 
-  if (!authorization) return res.sendStatus(401);
+	if (!authorization) return res.sendStatus(401);
 
-  const token = authorization.split(" ")[1];
+	const token = authorization.split(' ')[1];
 
-  jwt.verify(
-    token,
-    process.env.ACCESS_TOKEN_SECRET,
-    function (err, decodedData) {
-      if (err) return res.sendStatus(403);
+	jwt.verify(
+		token,
+		process.env.ACCESS_TOKEN_SECRET,
+		function (err, decodedData) {
+			if (err) return res.sendStatus(403);
 
-      req.user = decodedData.username;
+			req.user = decodedData.username;
 
-      next();
-    }
-  );
+			next();
+		}
+	);
 }
 
 export default verifyJWT;

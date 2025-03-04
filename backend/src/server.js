@@ -1,17 +1,16 @@
-import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
+import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
-import rootRoute from "./routes/root.js";
-import categoryRoute from "./routes/category.js";
-import searchRoute from "./routes/search.js";
-import registerRoute from "./routes/register.js"
-import loginRoute from "./routes/login.js";
+import rootRoute from './routes/root.js';
+import authRoute from './routes/auth.js';
+import searchRoute from './routes/search.js';
+import categoryRoute from './routes/category.js';
 
-import requestLogger from "./middlewares/reqLogger.js";
-import errorLogger from "./middlewares/errLogger.js";
+import requestLogger from './middlewares/reqLogger.js';
+import errorLogger from './middlewares/errLogger.js';
 
-import corsOptions from "./config/corsConfig.js";
+import corsOptions from './config/corsConfig.js';
 
 // initialise the express application
 const app = express();
@@ -25,22 +24,18 @@ app.use(cors(corsOptions));
 // parses any incoming json request body
 app.use(express.json());
 
-// cookie parsing 
+// cookie parsing
 app.use(cookieParser());
 
-// auth middleware
-/* auth code here */
-
 // application routes
-app.use("/", rootRoute);
-app.use("/category", categoryRoute);
-app.use("/search", searchRoute);
-app.use("/register", registerRoute);
-app.use("/login", loginRoute);
+app.use('/', rootRoute);
+app.use('/category', categoryRoute);
+app.use('/search', searchRoute);
+app.use('/auth', authRoute);
 
 // handles 404 routes
-app.all("*", (_req, _res, next) => {
-  const err = new Error("NOT FOUND");
+app.all('*', (_req, _res, next) => {
+  const err = new Error('NOT FOUND');
 
   err.statusCode = 404;
 
@@ -58,5 +53,5 @@ app.listen(process.env.PORT, function (err) {
     );
   }
 
-  console.log("Server is running on " + "http://localhost:" + process.env.PORT);
+  console.log('Server is running on ' + 'http://localhost:' + process.env.PORT);
 });

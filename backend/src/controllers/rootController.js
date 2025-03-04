@@ -1,4 +1,4 @@
-import productsData from "../utils/data.json" with {type: "json"};
+import productsData from '../utils/data.json' with { type: 'json' };
 
 export function getProducts(req, _res, next) {
   req.filteredData = productsData;
