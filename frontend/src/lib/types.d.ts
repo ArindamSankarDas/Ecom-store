@@ -12,7 +12,7 @@ export type SearchItem = {
   category: string;
 };
 
-export type ProductItemPageDetails = {
+export type ProductItemDetails = {
   images: string[];
   title: string;
   reviews: {
