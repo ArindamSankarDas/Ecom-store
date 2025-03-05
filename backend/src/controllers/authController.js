@@ -109,7 +109,23 @@ export function loginUser(req, res){
 }
 
 export function refreshTokenUser(req, res){
-	
+	const cookies = req.cookies;
+
+	if(!cookies?.jwt) return res.sendStatus(406);
+
+	const refreshToken = req.cookies.jwt;
+
+	jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, function (err, decoded) {
+		if(err) return res.sendStatus(406);
+
+		const accessToken = jwt.sign(
+			{ username: decoded.username }, 
+			process.env.ACCESS_TOKEN_SECRET, 
+			{ expiresIn: "15m" }
+		);
+
+		res.status(200).json({ accessToken });	
+	} )
 }
 
 export function logoutUser(req, res){
@@ -131,7 +147,6 @@ export function logoutUser(req, res){
 			{ 
 				httpOnly: true, 
 				sameSite: 'None', 
-				maxAge: 30 * 24 * 60 * 60 * 1000  
 			}
 		);
 
@@ -162,7 +177,6 @@ export function logoutUser(req, res){
 		{ 
 			httpOnly: true, 
 			sameSite: 'None', 
-			maxAge: 30 * 24 * 60 * 60 * 1000 
 		}
 	);
 
