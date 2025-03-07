@@ -1,4 +1,4 @@
-const allowedOrigins = [
+export const allowedOrigins = [
 	'https://ecomstore.devsankar.online',
 	'http://localhost:5173',
 ];

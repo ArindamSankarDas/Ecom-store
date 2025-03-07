@@ -5,14 +5,14 @@ import { writeFile } from 'node:fs';
 import { join } from 'node:path';
 
 export function registerUser(req, res, next){
-	const { username, email, password } = req.body;
+	const { name, email, password } = req.body;
 	
-	if(!username || !email || !password){
+	if(!name || !email || !password){
 		return res.status(400).json({msg: 'Details not given'});
 	}
 	
 	const foundUser = usersData.users.some(function(user){
-		return user.username === username || user.email || email;
+		return user.name === name || user.email || email;
 	});
 	
 
@@ -23,7 +23,7 @@ export function registerUser(req, res, next){
 	usersData.users = [
 		...usersData.users,
 		{
-			username,
+			name,
 			email,
 			password
 		}
@@ -37,20 +37,20 @@ export function registerUser(req, res, next){
 		}
 	);
 
-	req.body = { username, password	};
+	req.body = { name, password	};
 
 	next();
 }
 
 export function loginUser(req, res){
-	const { username, password } = req.body;
+	const { email, password } = req.body;
 
-	if(!username || !password){
+	if(!email || !password){
 		return res.status(400).json({ msg: 'Details not filled up' });
 	}
 
 	const foundUser =	usersData.users.find(function(user){
-		return user.username === username;	
+		return user.email === email;	
 	});
 
 	if(!foundUser){
@@ -62,19 +62,25 @@ export function loginUser(req, res){
 	}
 
 	const accessToken = jwt.sign(
-		{ username: foundUser.username},
+		{ 
+			email: foundUser.email,
+			name: foundUser.name
+		},
 		process.env.ACCESS_TOKEN_SECRET,
 		{expiresIn: '15m'}
 	);
 
 	const refreshToken = jwt.sign(
-		{ username: foundUser.username },
+		{ 
+			email: foundUser.email,
+			name: foundUser.name
+		 },
 		process.env.REFRESH_TOKEN_SECRET,
 		{expiresIn: '30d'}
 	);	
 
 	const otherUsers = usersData.users.filter(function(user){
-		return foundUser.username !== user.username;
+		return foundUser.email !== user.email;
 	});
 
 	const currentUser = {
@@ -100,7 +106,8 @@ export function loginUser(req, res){
 		refreshToken, 
 		{
 			httpOnly: true, 
-			sameSite: 'None', 
+			sameSite: 'None',
+			secure: true,
 			maxAge: 30 * 24 * 60 * 60 * 1000
 		}
 	);
@@ -119,7 +126,7 @@ export function refreshTokenUser(req, res){
 		if(err) return res.sendStatus(406);
 
 		const accessToken = jwt.sign(
-			{ username: decoded.username }, 
+			{ name: decoded.name }, 
 			process.env.ACCESS_TOKEN_SECRET, 
 			{ expiresIn: "15m" }
 		);
@@ -146,7 +153,8 @@ export function logoutUser(req, res){
 			'jwt', 
 			{ 
 				httpOnly: true, 
-				sameSite: 'None', 
+				sameSite: 'None',
+				secure: true
 			}
 		);
 
@@ -176,7 +184,8 @@ export function logoutUser(req, res){
 		'jwt', 
 		{ 
 			httpOnly: true, 
-			sameSite: 'None', 
+			sameSite: 'None',
+			secure: true
 		}
 	);
 

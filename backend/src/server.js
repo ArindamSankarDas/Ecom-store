@@ -12,11 +12,16 @@ import errorLogger from './middlewares/errLogger.js';
 
 import corsOptions from './config/corsConfig.js';
 
+import credentials from './middlewares/credentials.js';
+
 // initialise the express application
 const app = express();
 
 // creates log for any know requests routes
 app.use(requestLogger);
+
+// set allowed credentials
+app.use(credentials);
 
 // handles cross-origin requests from browsers and other server services
 app.use(cors(corsOptions));
@@ -35,11 +40,11 @@ app.use('/auth', authRoute);
 
 // handles 404 routes
 app.all('*', (_req, _res, next) => {
-  const err = new Error('NOT FOUND');
+	const err = new Error('NOT FOUND');
 
-  err.statusCode = 404;
+	err.statusCode = 404;
 
-  next(err);
+	next(err);
 });
 
 // global error handler
@@ -47,11 +52,11 @@ app.use(errorLogger);
 
 // server starts listening on this port
 app.listen(process.env.PORT, function (err) {
-  if (err) {
-    console.error(
-      `An Error code of ${err.name} with the message ${err.message}`
-    );
-  }
+	if (err) {
+		console.error(
+			`An Error code of ${err.name} with the message ${err.message}`
+		);
+	}
 
-  console.log('Server is running on ' + 'http://localhost:' + process.env.PORT);
+	console.log('Server is running on ' + 'http://localhost:' + process.env.PORT);
 });
