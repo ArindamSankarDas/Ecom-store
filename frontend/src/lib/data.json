@@ -1,50 +1,50 @@
 {
-  "featuredCategories": [
-    {
-      "name": "Beauty",
-      "thumbnail": "https://images.unsplash.com/photo-1721332149274-586f2604884d?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-    },
-    {
-      "name": "Furniture",
-      "thumbnail": "https://images.unsplash.com/photo-1721332149274-586f2604884d?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-    },
-    {
-      "name": "Groceries",
-      "thumbnail": "https://images.unsplash.com/photo-1721332149274-586f2604884d?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-    },
-    {
-      "name": "Laptops",
-      "thumbnail": "https://images.unsplash.com/photo-1721332149274-586f2604884d?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-    }
-  ],
-  "featuredProducts": [
-    {
-      "id": 1,
-      "title": "Essence Mascara Lash Princess",
-      "category": "beauty",
-      "price": 9.99,
-      "thumbnail": "https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png"
-    },
-    {
-      "id": 78,
-      "title": "Apple MacBook Pro 14 Inch Space Grey",
-      "category": "laptops",
-      "price": 1999.99,
-      "thumbnail": "https://cdn.dummyjson.com/products/images/laptops/Apple%20MacBook%20Pro%2014%20Inch%20Space%20Grey/thumbnail.png"
-    },
-    {
-      "id": 11,
-      "title": "Annibale Colombo Bed",
-      "category": "furniture",
-      "price": 1899.99,
-      "thumbnail": "https://cdn.dummyjson.com/products/images/furniture/Annibale%20Colombo%20Bed/thumbnail.png"
-    },
-    {
-      "id": 16,
-      "title": "Apple",
-      "category": "groceries",
-      "price": 1.99,
-      "thumbnail": "https://cdn.dummyjson.com/products/images/groceries/Apple/thumbnail.png"
-    }
-  ]
+	"featuredCategories": [
+		{
+			"name": "Beauty",
+			"thumbnail": "https://images.unsplash.com/photo-1721332149274-586f2604884d?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+		},
+		{
+			"name": "Furniture",
+			"thumbnail": "https://images.unsplash.com/photo-1721332149274-586f2604884d?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+		},
+		{
+			"name": "Groceries",
+			"thumbnail": "https://images.unsplash.com/photo-1721332149274-586f2604884d?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+		},
+		{
+			"name": "Laptops",
+			"thumbnail": "https://images.unsplash.com/photo-1721332149274-586f2604884d?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+		}
+	],
+	"featuredProducts": [
+		{
+			"id": 1,
+			"title": "Essence Mascara Lash Princess",
+			"category": "beauty",
+			"price": 9.99,
+			"thumbnail": "https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png"
+		},
+		{
+			"id": 78,
+			"title": "Apple MacBook Pro 14 Inch Space Grey",
+			"category": "laptops",
+			"price": 1999.99,
+			"thumbnail": "https://cdn.dummyjson.com/products/images/laptops/Apple%20MacBook%20Pro%2014%20Inch%20Space%20Grey/thumbnail.png"
+		},
+		{
+			"id": 11,
+			"title": "Annibale Colombo Bed",
+			"category": "furniture",
+			"price": 1899.99,
+			"thumbnail": "https://cdn.dummyjson.com/products/images/furniture/Annibale%20Colombo%20Bed/thumbnail.png"
+		},
+		{
+			"id": 16,
+			"title": "Apple",
+			"category": "groceries",
+			"price": 1.99,
+			"thumbnail": "https://cdn.dummyjson.com/products/images/groceries/Apple/thumbnail.png"
+		}
+	]
 }

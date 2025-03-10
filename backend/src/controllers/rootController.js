@@ -1,3 +1,4 @@
+import { prisma } from "../config/prismaConfig.js"
 import productsData from '../utils/data.json' with { type: 'json' };
 
 export function getProducts(req, _res, next) {
@@ -14,14 +15,19 @@ export function getProductItem(req, _res, next){
     next();
 }
 
-export function getCategoryList(_req, res){
-  let fetchedCategories = {};
+export async function getCategoryList(_req, res, next){
+  try{
+    const fetchedCategories = await prisma.product.findMany({
+      distinct: ['category'],
+      select: {
+        category: true
+      }
+    }) 
 
-  productsData.forEach(function (product) {
-    if(!(product.category in fetchedCategories)){
-      fetchedCategories[product.category] = 1;
-    }
-  });
+    const result = fetchedCategories.map(item => item.category);
 
-  res.status(200).json(Object.keys(fetchedCategories));
+    res.status(200).json(result);
+  }catch(error){
+    next(error)
+  }
 }

@@ -13,6 +13,7 @@ import errorLogger from './middlewares/errLogger.js';
 import corsOptions from './config/corsConfig.js';
 
 import credentials from './middlewares/credentials.js';
+import { connectDB } from './config/prismaConfig.js';
 
 // initialise the express application
 const app = express();
@@ -50,13 +51,17 @@ app.all('*', (_req, _res, next) => {
 // global error handler
 app.use(errorLogger);
 
-// server starts listening on this port
-app.listen(process.env.PORT, function (err) {
-	if (err) {
-		console.error(
-			`An Error code of ${err.name} with the message ${err.message}`
-		);
-	}
+// server starts listening on this port after database connection is established
+connectDB().then(function () {
+	app.listen(process.env.PORT, function (err) {
+		if (err) {
+			console.error(
+				`An Error code of ${err.name} with the message ${err.message}`
+			);
+		}
 
-	console.log('Server is running on ' + 'http://localhost:' + process.env.PORT);
+		console.log(
+			'Server is running on ' + 'http://localhost:' + process.env.PORT
+		);
+	});
 });

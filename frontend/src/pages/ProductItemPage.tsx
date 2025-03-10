@@ -25,7 +25,7 @@ const ProductItemPage = () => {
 			</Button>
 			<section className='flex flex-col gap-10 lg:flex-row md:justify-center md:items-center'>
 				<img
-					src={productDetails?.images[0]}
+					src={productDetails?.thumbnail}
 					alt={`${productDetails?.title} image`}
 					className='w-full h-auto border-2 rounded-md md:w-[560px]  lg:min-w-[500px]'
 				/>

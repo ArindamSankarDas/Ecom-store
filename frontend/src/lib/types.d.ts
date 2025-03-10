@@ -13,8 +13,9 @@ export type SearchItem = {
 };
 
 export type ProductItemDetails = {
-	images: string[];
+	thumbnail: string;
 	title: string;
+	stock: number;
 	reviews: {
 		rating: number;
 	}[];
