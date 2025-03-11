@@ -34,10 +34,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 // application routes
-app.use('/', rootRoute);
+app.use('/auth', authRoute);
 app.use('/category', categoryRoute);
 app.use('/search', searchRoute);
-app.use('/auth', authRoute);
+app.use('/', rootRoute);
 
 // handles 404 routes
 app.all('*', (_req, _res, next) => {

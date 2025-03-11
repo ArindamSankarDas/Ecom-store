@@ -1,33 +1,48 @@
-import { prisma } from "../config/prismaConfig.js"
-import productsData from '../utils/data.json' with { type: 'json' };
+import { prisma } from '../config/prismaConfig.js';
 
-export function getProducts(req, _res, next) {
-  req.filteredData = productsData;
-  next();
+export async function getProducts(req, _res, next) {
+	try {
+		const productsData = await prisma.product.findMany({
+			include: { reviews: true },
+		});
+
+		req.filteredData = productsData;
+
+		next();
+	} catch (error) {
+		next(error);
+	}
 }
 
-export function getProductItem(req, _res, next){
-    const findData = productsData.find(function (product) {
-      return product.id === parseInt(req.params.productId)
-    });
+export async function getProductItem(req, _res, next) {
+	try {
+		const productItem = await prisma.product.findFirst({
+			where: {
+				id: parseInt(req.params.productId),
+			},
+			include: { reviews: true },
+		});
 
-    req.filteredData = findData;
-    next();
+		req.filteredData = productItem;
+		next();
+	} catch (error) {
+		next(error);
+	}
 }
 
-export async function getCategoryList(_req, res, next){
-  try{
-    const fetchedCategories = await prisma.product.findMany({
-      distinct: ['category'],
-      select: {
-        category: true
-      }
-    }) 
+export async function getCategoryList(_req, res, next) {
+	try {
+		const fetchedCategories = await prisma.product.findMany({
+			distinct: ['category'],
+			select: {
+				category: true,
+			},
+		});
 
-    const result = fetchedCategories.map(item => item.category);
+		const result = fetchedCategories.map((item) => item.category);
 
-    res.status(200).json(result);
-  }catch(error){
-    next(error)
-  }
+		res.status(200).json(result);
+	} catch (error) {
+		next(error);
+	}
 }

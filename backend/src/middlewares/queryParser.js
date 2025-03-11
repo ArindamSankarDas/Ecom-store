@@ -24,8 +24,7 @@ function queryParser(req, res, next) {
 	if (!Array.isArray(fetchedProducts)) {
 		const fetchedProduct = selectProps(select, fetchedProducts);
 
-		res.status(200).json(fetchedProduct);
-		return;
+		return res.status(200).json(fetchedProduct);
 	}
 
 	const skippedProductItems = parseInt(skip)

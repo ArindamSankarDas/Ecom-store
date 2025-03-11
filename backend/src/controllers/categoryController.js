@@ -1,13 +1,18 @@
-import productsData from '../utils/data.json' with { type: 'json' };
+import { prisma } from '../config/prismaConfig.js';
 
-export function getCategoryProducts(req, _res, next) {
-  const { productCategory } = req.params;
+export async function getCategoryProducts(req, _res, next) {
+	try {
+		const { productCategory } = req.params;
 
-  const filteredData = productsData.filter(function (product) {
-    return product.category === productCategory;
-  });
+		const categoryItems = await prisma.product.findMany({
+			where: { category: productCategory },
+			include: { reviews: true },
+		});
 
-  req.filteredData = filteredData;
+		req.filteredData = categoryItems;
 
-  next();
+		next();
+	} catch (error) {
+		next(error);
+	}
 }

@@ -1,23 +1,26 @@
-import productsData from '../utils/data.json' with { type: 'json' };
+import { prisma } from '../config/prismaConfig.js';
 
-export function searchProduct(req, _res, next) {
-  const { q } = req.query;
+export async function searchProduct(req, _res, next) {
+	console.log('hello');
 
-  if (!q.toLowerCase()) {
-    next(new Error('Empty Query'));
-    return;
-  }
+	const { q } = req.query;
 
-  const filteredData = productsData.filter(function (product) {
-    return Object.values(product).some(function (value) {
-      return (
-        typeof value === 'string' &&
-        value.toLowerCase().includes(q.toLowerCase())
-      );
-    });
-  });
+	if (!q || !q.trim()) {
+		return next(new Error('Empty Query'));
+	}
 
-  req.filteredData = filteredData;
+	try {
+		const formatedQuery = q.trim().replace(/s+/g, '&');
 
-  next();
+		const filteredData = await prisma.$queryRaw`
+			SELECT * FROM "Product"
+			WHERE to_tsvector('english', title || ' ' || description) @@ to_tsquery(${formatedQuery});
+		`;
+
+		req.filteredData = filteredData;
+
+		next();
+	} catch (error) {
+		next(error);
+	}
 }
