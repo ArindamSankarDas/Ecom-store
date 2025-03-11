@@ -1,8 +1,6 @@
 import { prisma } from '../config/prismaConfig.js';
 
 export async function searchProduct(req, _res, next) {
-	console.log('hello');
-
 	const { q } = req.query;
 
 	if (!q || !q.trim()) {
@@ -10,11 +8,9 @@ export async function searchProduct(req, _res, next) {
 	}
 
 	try {
-		const formatedQuery = q.trim().replace(/s+/g, '&');
-
 		const filteredData = await prisma.$queryRaw`
 			SELECT * FROM "Product"
-			WHERE to_tsvector('english', title || ' ' || description) @@ to_tsquery(${formatedQuery});
+			WHERE to_tsvector('english', title || ' ' || description) @@ to_tsquery(${q.trim()});
 		`;
 
 		req.filteredData = filteredData;
