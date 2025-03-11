@@ -27,7 +27,7 @@ const SearchSuggestions: React.FC<Props> = ({
 					'search-dropdown',
 					searchValue.length > 1 &&
 						'px-4 py-2 border-2 overflow-x-hidden overflow-y-scroll',
-					suggestions.length && 'h-64'
+					suggestions?.length && 'h-64'
 				)}
 			>
 				{loading ? (
@@ -41,7 +41,7 @@ const SearchSuggestions: React.FC<Props> = ({
 					</div>
 				) : (
 					<section className='flex flex-col gap-2'>
-						{suggestions.map((suggestion, index) => (
+						{suggestions?.map((suggestion, index) => (
 							<SearchSuggestionItem
 								key={index}
 								itemId={suggestion.id}
