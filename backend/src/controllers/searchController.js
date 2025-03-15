@@ -9,7 +9,7 @@ export async function searchProduct(req, _res, next) {
 
 	try {
 		const filteredData = await prisma.$queryRaw`
-			SELECT * FROM "Product"
+			SELECT * FROM "Products"
 			WHERE to_tsvector('english', title || ' ' || description) @@ to_tsquery(${q.trim()});
 		`;
 

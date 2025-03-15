@@ -4,7 +4,7 @@ export async function getCategoryProducts(req, _res, next) {
 	try {
 		const { productCategory } = req.params;
 
-		const categoryItems = await prisma.product.findMany({
+		const categoryItems = await prisma.products.findMany({
 			where: { category: productCategory },
 			include: { reviews: true },
 		});

@@ -9,7 +9,7 @@ export async function registerUser(req, res, next) {
 			return res.status(400).json({ msg: 'Details not given' });
 		}
 
-		const foundUser = await prisma.user.findFirst({
+		const foundUser = await prisma.users.findFirst({
 			where: { OR: [{ name }, { email }] },
 		});
 
@@ -17,7 +17,7 @@ export async function registerUser(req, res, next) {
 			return res.status(409).json({ msg: 'Email or User already Taken' });
 		}
 
-		await prisma.user.create({
+		await prisma.users.create({
 			data: {
 				name,
 				email,
@@ -44,7 +44,7 @@ export async function loginUser(req, res) {
 			return res.status(400).json({ msg: 'Details not filled up' });
 		}
 
-		const foundUser = await prisma.user.findUnique({
+		const foundUser = await prisma.users.findUnique({
 			where: { email },
 		});
 
@@ -74,7 +74,7 @@ export async function loginUser(req, res) {
 			{ expiresIn: '30d' }
 		);
 
-		await prisma.user.update({
+		await prisma.users.update({
 			where: { email: foundUser.email },
 			data: { refreshToken },
 		});
@@ -140,7 +140,7 @@ export async function logoutUser(req, res) {
 			return res.sendStatus(204);
 		}
 
-		await prisma.user.update({
+		await prisma.users.update({
 			where: { email: foundUser.email },
 			data: { refreshToken: '' },
 		});
