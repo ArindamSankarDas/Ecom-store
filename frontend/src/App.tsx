@@ -11,10 +11,14 @@ import ShopPage from '@pages/ShopPage';
 import ProductItemPage from '@pages/ProductItemPage';
 import SignUpPage from '@pages/SignUpPage';
 
+import useLocalStorage from '@hooks/useLocalStorage';
 import { useFetchCategoryList } from '@hooks/useProducts';
 
 const App = () => {
 	const categoryList = useFetchCategoryList();
+	const { accessToken } = useLocalStorage();
+
+	console.log(accessToken);
 
 	return (
 		<Routes>

@@ -2,10 +2,24 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 import clsx from 'clsx';
-import { ChevronRight, Menu, Search, ShoppingCart } from 'lucide-react';
+import {
+	ChevronRight,
+	CircleUser,
+	Menu,
+	Search,
+	ShoppingCart,
+} from 'lucide-react';
 
 import SearchBox from '@components/Search/SearchBox';
 import SearchSuggestions from '@/components/Search/SearchSuggestions';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@components/ui/dropdown-menu';
 
 const Header = () => {
 	const navigate = useNavigate();
@@ -109,6 +123,22 @@ const Header = () => {
 					>
 						LOGIN
 					</button>
+
+					<DropdownMenu>
+						<DropdownMenuTrigger>
+							<CircleUser size={30} />
+						</DropdownMenuTrigger>
+						<DropdownMenuContent>
+							<DropdownMenuLabel>My Account</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem className='cursor-pointer'>
+								Profile
+							</DropdownMenuItem>
+							<DropdownMenuItem className='cursor-pointer'>
+								Logout
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
 				</div>
 			</section>
 

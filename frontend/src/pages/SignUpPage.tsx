@@ -6,8 +6,11 @@ import { Link } from 'react-router-dom';
 import { useForm, useWatch } from 'react-hook-form';
 import { SignUpFormData } from '@lib/types';
 import { signUpUser } from '@/api/apiService';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 const SignUpPage = () => {
+	const { setAuthToken } = useLocalStorage();
+
 	const {
 		register,
 		control,
@@ -25,8 +28,8 @@ const SignUpPage = () => {
 	const password = useWatch({ control, name: 'password' });
 
 	const onSubmit = function (signUpData: SignUpFormData) {
-		signUpUser(signUpData).then(function (data) {
-			console.log(data);
+		signUpUser(signUpData).then(async function (data: { accessToken: string }) {
+			setAuthToken(data.accessToken);
 		});
 
 		reset();
