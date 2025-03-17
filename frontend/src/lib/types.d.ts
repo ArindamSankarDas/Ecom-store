@@ -38,3 +38,9 @@ export type loginFormData = {
 	email: string;
 	password: string;
 };
+
+export type AuthState = {
+	accessToken: string|null;
+	login: (token: string) => void;
+	logout: () => void
+}

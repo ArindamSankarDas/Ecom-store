@@ -1,23 +1,15 @@
+import { AuthState } from '@lib/types';
 import { useEffect, useState } from 'react';
 
-function useLocalStorage(): {
-	accessToken: string | null;
-	setAuthToken: (token: string) => void;
-} {
-	const [accessToken, setAccessToken] = useState(
-		localStorage.getItem('access-token')
-	);
-
-	function setAuthToken(token: string) {
-		localStorage.setItem('access-token', token);
-
-		setAccessToken(token);
-	}
+function useLocalStorage(): AuthState {
+	const [accessToken, setAccessToken] = useState(function () {
+		return localStorage.getItem('access-token') || null;
+	});
 
 	useEffect(function () {
 		const handleStorage = function (event: StorageEvent) {
 			if (event.key === 'access-token') {
-				setAccessToken(event.newValue);
+				setAccessToken(event.newValue || null);
 			}
 		};
 
@@ -28,7 +20,19 @@ function useLocalStorage(): {
 		};
 	});
 
-	return { accessToken, setAuthToken };
+	function login(token: string) {
+		localStorage.setItem('access-token', token);
+
+		setAccessToken(token);
+	}
+
+	function logout() {
+		localStorage.removeItem('access-token');
+
+		setAccessToken(null);
+	}
+
+	return { accessToken, login, logout };
 }
 
 export default useLocalStorage;

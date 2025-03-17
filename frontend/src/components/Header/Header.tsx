@@ -5,9 +5,11 @@ import clsx from 'clsx';
 import {
 	ChevronRight,
 	CircleUser,
+	LogOut,
 	Menu,
 	Search,
 	ShoppingCart,
+	UserPen,
 } from 'lucide-react';
 
 import SearchBox from '@components/Search/SearchBox';
@@ -21,8 +23,11 @@ import {
 	DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 
+import useLocalStorage from '@hooks/useLocalStorage';
+
 const Header = () => {
 	const navigate = useNavigate();
+	const { logout } = useLocalStorage();
 
 	const [isToggled, setIsToggled] = useState(false);
 	const [isSearchActive, setIsSearchActive] = useState(false);
@@ -132,9 +137,11 @@ const Header = () => {
 							<DropdownMenuLabel>My Account</DropdownMenuLabel>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem className='cursor-pointer'>
+								<UserPen />
 								Profile
 							</DropdownMenuItem>
-							<DropdownMenuItem className='cursor-pointer'>
+							<DropdownMenuItem className='cursor-pointer' onClick={logout}>
+								<LogOut />
 								Logout
 							</DropdownMenuItem>
 						</DropdownMenuContent>

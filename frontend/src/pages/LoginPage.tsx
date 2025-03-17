@@ -9,7 +9,10 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { loginUser } from '@/api/apiService';
 
+import useLocalStorage from '@/hooks/useLocalStorage';
+
 const LoginPage = () => {
+	const { login } = useLocalStorage();
 	const {
 		formState: { errors },
 		register,
@@ -23,8 +26,8 @@ const LoginPage = () => {
 	});
 
 	const onSubmint = function (signInData: loginFormData) {
-		loginUser(signInData).then((data) => {
-			console.log(data);
+		loginUser(signInData).then((data: { accessToken: string }) => {
+			login(data.accessToken);
 		});
 
 		reset();

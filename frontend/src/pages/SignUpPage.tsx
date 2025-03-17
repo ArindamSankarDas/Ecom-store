@@ -9,7 +9,7 @@ import { signUpUser } from '@/api/apiService';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 const SignUpPage = () => {
-	const { setAuthToken } = useLocalStorage();
+	const { login } = useLocalStorage();
 
 	const {
 		register,
@@ -25,11 +25,12 @@ const SignUpPage = () => {
 			confirmPassword: '',
 		},
 	});
+
 	const password = useWatch({ control, name: 'password' });
 
 	const onSubmit = function (signUpData: SignUpFormData) {
-		signUpUser(signUpData).then(async function (data: { accessToken: string }) {
-			setAuthToken(data.accessToken);
+		signUpUser(signUpData).then(function (data: { accessToken: string }) {
+			login(data.accessToken);
 		});
 
 		reset();
