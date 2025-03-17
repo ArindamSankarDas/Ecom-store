@@ -5,13 +5,14 @@ import { Label } from '@components/ui/label';
 import { Input } from '@components/ui/input';
 import { Button } from '@components/ui/button';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { loginUser } from '@/api/apiService';
 
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 const LoginPage = () => {
+	const navigate = useNavigate();
 	const { login } = useLocalStorage();
 	const {
 		formState: { errors },
@@ -26,11 +27,14 @@ const LoginPage = () => {
 	});
 
 	const onSubmint = function (signInData: loginFormData) {
-		loginUser(signInData).then((data: { accessToken: string }) => {
-			login(data.accessToken);
-		});
-
-		reset();
+		loginUser(signInData)
+			.then((data: { accessToken: string }) => {
+				login(data.accessToken);
+			})
+			.then(function () {
+				reset();
+				navigate('/shop');
+			});
 	};
 
 	return (

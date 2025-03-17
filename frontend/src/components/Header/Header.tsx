@@ -27,7 +27,7 @@ import useLocalStorage from '@hooks/useLocalStorage';
 
 const Header = () => {
 	const navigate = useNavigate();
-	const { logout } = useLocalStorage();
+	const { logout, isAuthenticated } = useLocalStorage();
 
 	const [isToggled, setIsToggled] = useState(false);
 	const [isSearchActive, setIsSearchActive] = useState(false);
@@ -121,31 +121,33 @@ const Header = () => {
 						</NavLink>
 					</div>
 
-					{/* login */}
-					<button
-						className='ml-4 btn-signUp text-nowrap rounded-sm lg:inline-block'
-						onClick={() => navigate('/login')}
-					>
-						LOGIN
-					</button>
-
-					<DropdownMenu>
-						<DropdownMenuTrigger>
-							<CircleUser size={30} />
-						</DropdownMenuTrigger>
-						<DropdownMenuContent>
-							<DropdownMenuLabel>My Account</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem className='cursor-pointer'>
-								<UserPen />
-								Profile
-							</DropdownMenuItem>
-							<DropdownMenuItem className='cursor-pointer' onClick={logout}>
-								<LogOut />
-								Logout
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+					{/* login and loggedIn */}
+					{isAuthenticated ? (
+						<DropdownMenu>
+							<DropdownMenuTrigger>
+								<CircleUser size={30} />
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuLabel>My Account</DropdownMenuLabel>
+								<DropdownMenuSeparator />
+								<DropdownMenuItem className='cursor-pointer'>
+									<UserPen />
+									Profile
+								</DropdownMenuItem>
+								<DropdownMenuItem className='cursor-pointer' onClick={logout}>
+									<LogOut />
+									Logout
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					) : (
+						<button
+							className='ml-4 btn-signUp text-nowrap rounded-sm lg:inline-block'
+							onClick={() => navigate('/login')}
+						>
+							LOGIN
+						</button>
+					)}
 				</div>
 			</section>
 

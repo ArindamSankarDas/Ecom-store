@@ -1,8 +1,8 @@
-import { useAuth } from '@/context/AuthContext';
+import useLocalStorage from '@/hooks/useLocalStorage';
 import { Navigate, Outlet } from 'react-router-dom';
 
 function ProtectedRoute() {
-	const { isAuthenticated } = useAuth();
+	const { isAuthenticated } = useLocalStorage();
 
 	return !isAuthenticated ? <Navigate to={'/login'} /> : <Outlet />;
 }

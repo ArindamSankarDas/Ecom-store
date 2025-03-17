@@ -78,3 +78,20 @@ export const loginUser = async function (loginData: loginFormData) {
 		console.log(error);
 	}
 };
+
+export const logoutUser = async function () {
+	try {
+		const response = await fetch(`${BASE_URL}/auth/logout`, {
+			method: 'POST',
+			credentials: 'include',
+		});
+
+		if (response.ok) {
+			console.log('Logout successful');
+		} else {
+			console.error('Logout failed');
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};

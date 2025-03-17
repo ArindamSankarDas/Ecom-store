@@ -40,7 +40,8 @@ export type loginFormData = {
 };
 
 export type AuthState = {
-	accessToken: string|null;
+	accessToken: string | null;
 	login: (token: string) => void;
-	logout: () => void
-}
+	logout: () => void;
+	isAuthenticated: boolean;
+};

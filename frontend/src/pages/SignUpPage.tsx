@@ -2,7 +2,7 @@ import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import { Label } from '@components/ui/label';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm, useWatch } from 'react-hook-form';
 import { SignUpFormData } from '@lib/types';
 import { signUpUser } from '@/api/apiService';
@@ -10,6 +10,7 @@ import useLocalStorage from '@/hooks/useLocalStorage';
 
 const SignUpPage = () => {
 	const { login } = useLocalStorage();
+	const navigate = useNavigate();
 
 	const {
 		register,
@@ -29,11 +30,14 @@ const SignUpPage = () => {
 	const password = useWatch({ control, name: 'password' });
 
 	const onSubmit = function (signUpData: SignUpFormData) {
-		signUpUser(signUpData).then(function (data: { accessToken: string }) {
-			login(data.accessToken);
-		});
-
-		reset();
+		signUpUser(signUpData)
+			.then(function (data: { accessToken: string }) {
+				login(data.accessToken);
+			})
+			.then(function () {
+				reset();
+				navigate('/shop');
+			});
 	};
 
 	return (
