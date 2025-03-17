@@ -126,7 +126,7 @@ export async function logoutUser(req, res) {
 
 		const refreshToken = cookies.jwt;
 
-		const foundUser = await prisma.user.findFirst({
+		const foundUser = await prisma.users.findFirst({
 			where: { refreshToken },
 		});
 
