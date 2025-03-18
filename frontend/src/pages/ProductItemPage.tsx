@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { ChevronLeft, Minus, Plus, RefreshCw, Star, Truck } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@components/ui/button';
-import { useFetchProductItem } from '@/hooks/useProducts';
+import { useFetchProductItem } from '@hooks/useProducts';
 
 const ProductItemPage = () => {
 	const navigate = useNavigate();

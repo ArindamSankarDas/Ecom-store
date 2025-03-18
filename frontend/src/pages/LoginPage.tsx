@@ -1,4 +1,4 @@
-import { loginFormData } from '@/lib/types';
+import { loginFormData } from '@lib/types';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import { Label } from '@components/ui/label';
@@ -7,9 +7,9 @@ import { Button } from '@components/ui/button';
 
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { loginUser } from '@/api/apiService';
+import { loginUser } from '@api/apiService';
 
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@context/AuthContext';
 
 const LoginPage = () => {
 	const navigate = useNavigate();

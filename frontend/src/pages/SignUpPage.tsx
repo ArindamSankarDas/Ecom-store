@@ -5,8 +5,8 @@ import { Label } from '@components/ui/label';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useForm, useWatch } from 'react-hook-form';
 import { SignUpFormData } from '@lib/types';
-import { signUpUser } from '@/api/apiService';
-import { useAuth } from '@/context/AuthContext';
+import { signUpUser } from '@api/apiService';
+import { useAuth } from '@context/AuthContext';
 
 const SignUpPage = () => {
 	const { login, isAuthenticated } = useAuth();

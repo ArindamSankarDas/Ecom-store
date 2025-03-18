@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 import SearchBox from '@components/Search/SearchBox';
-import SearchSuggestions from '@/components/Search/SearchSuggestions';
+import SearchSuggestions from '@components/Search/SearchSuggestions';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -73,7 +73,7 @@ const Header = () => {
 				</div>
 
 				{/* nav menu items (desk only) */}
-				<nav className='hidden lg:nav-menu-desk '>
+				<nav className='hidden lg:nav-menu-desk'>
 					<NavLink
 						to='/'
 						className={({ isActive }) => (isActive ? 'stopHover' : '')}

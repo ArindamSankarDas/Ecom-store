@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 import SearchSuggestionItem from '@components/Search/SearchSuggestionItem';
 
-import { useFetchProductSuggestions } from '@/hooks/useProducts';
+import { useFetchProductSuggestions } from '@hooks/useProducts';
 
 type Props = {
 	searchToggle: boolean;

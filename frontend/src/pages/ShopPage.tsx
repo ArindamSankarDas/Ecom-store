@@ -2,7 +2,7 @@ import ProductCard from '@components/ProductCard/ProductCard';
 
 import { ButtonLoading } from '@components/ui/custom-buttons';
 import { Outlet, useParams } from 'react-router-dom';
-import { useFetchProducts } from '@/hooks/useProducts';
+import { useFetchProducts } from '@hooks/useProducts';
 
 const ShopPage = ({ currentPath }: { currentPath: string }) => {
 	const { id } = useParams();
