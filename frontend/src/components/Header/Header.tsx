@@ -23,12 +23,11 @@ import {
 	DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 
-import useLocalStorage from '@hooks/useLocalStorage';
+import { useAuth } from '@context/AuthContext';
 
 const Header = () => {
 	const navigate = useNavigate();
-	const { logout, isAuthenticated } = useLocalStorage();
-
+	const { isAuthenticated, logout } = useAuth();
 	const [isToggled, setIsToggled] = useState(false);
 	const [isSearchActive, setIsSearchActive] = useState(false);
 	const [searchInputValue, setSearchInputValue] = useState('');
@@ -130,7 +129,10 @@ const Header = () => {
 							<DropdownMenuContent>
 								<DropdownMenuLabel>My Account</DropdownMenuLabel>
 								<DropdownMenuSeparator />
-								<DropdownMenuItem className='cursor-pointer'>
+								<DropdownMenuItem
+									className='cursor-pointer'
+									onClick={() => navigate('/profile')}
+								>
 									<UserPen />
 									Profile
 								</DropdownMenuItem>

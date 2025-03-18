@@ -5,15 +5,15 @@ import { Label } from '@components/ui/label';
 import { Input } from '@components/ui/input';
 import { Button } from '@components/ui/button';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { loginUser } from '@/api/apiService';
 
-import useLocalStorage from '@/hooks/useLocalStorage';
+import { useAuth } from '@/context/AuthContext';
 
 const LoginPage = () => {
 	const navigate = useNavigate();
-	const { login } = useLocalStorage();
+	const { login, isAuthenticated } = useAuth();
 	const {
 		formState: { errors },
 		register,
@@ -37,7 +37,9 @@ const LoginPage = () => {
 			});
 	};
 
-	return (
+	return isAuthenticated ? (
+		<Navigate to={'/shop'} />
+	) : (
 		<main className='flex-1 flex justify-center items-center py-10 px-3 md:py-20'>
 			<Card className='w-full max-w-md shadow'>
 				<CardHeader>

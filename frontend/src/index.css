@@ -97,11 +97,11 @@
 
     &>.footer-grid-item {
       h1 {
-        @apply font-bold text-xl mb-2;
+        @apply font-bold text-xl mb-2 md:text-lg;
       }
 
       p {
-        @apply text-sm mb-2;
+        @apply text-sm mb-2 md:text-xs;
       }
 
       &:not(:first-child)>p {
