@@ -1,14 +1,92 @@
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { ChevronLeft, Minus, Plus, RefreshCw, Star, Truck } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@components/ui/button';
 import { useFetchProductItem } from '@hooks/useProducts';
+import { useAuth } from '@context/AuthContext';
+import { addToCart } from '@api/apiService';
+import { useCart } from '@context/CartContext';
 
 const ProductItemPage = () => {
+	const { setCart } = useCart();
 	const navigate = useNavigate();
 	const { id } = useParams();
 
+	const { accessToken, isAuthenticated } = useAuth();
+
 	const { productDetails, reviews } = useFetchProductItem(id);
+	const [itemCount, setItemCount] = useState({
+		currentCount: productDetails?.stock ? 1 : 0,
+		totalCount: productDetails?.stock || 0,
+	});
+
+	useEffect(() => {
+		if (productDetails?.stock !== undefined) {
+			setItemCount(function (prevstate) {
+				return {
+					...prevstate,
+					currentCount: 1,
+					totalCount: productDetails.stock,
+				};
+			});
+		}
+	}, [productDetails?.stock]);
+
+	function increaseCount() {
+		if (itemCount.currentCount + 1 > itemCount.totalCount) return;
+
+		setItemCount(function (prevstate) {
+			return {
+				...prevstate,
+				currentCount: prevstate.currentCount + 1,
+			};
+		});
+	}
+
+	function decreaseCount() {
+		if (itemCount.currentCount - 1 < 1) return;
+
+		setItemCount(function (prevstate) {
+			return {
+				...prevstate,
+				currentCount: prevstate.currentCount - 1,
+			};
+		});
+	}
+
+	function submitToCart() {
+		if (!isAuthenticated) {
+			alert('Please login first');
+			return;
+		}
+
+		if (
+			!(
+				productDetails?.title &&
+				productDetails?.price &&
+				productDetails?.thumbnail &&
+				productDetails?.thumbnail &&
+				productDetails?.category
+			)
+		) {
+			alert('Property on product not present');
+			return;
+		}
+
+		addToCart(
+			{
+				productCategory: productDetails.category,
+				productThumbnail: productDetails.thumbnail,
+				productName: productDetails.title,
+				productPrice: productDetails.price,
+				productQty: itemCount.currentCount,
+			},
+			accessToken
+		).then((data) => {
+			setCart(data);
+		});
+	}
 
 	return (
 		<div
@@ -72,17 +150,28 @@ const ProductItemPage = () => {
 						className='flex items-center gap-3 mt-6'
 					>
 						<div className='w-fit flex justify-center items-center gap-4 border rounded-lg'>
-							<button className='border-r py-2 px-3 rounded-tl-lg rounded-bl-lg hover:bg-slate-50 active:bg-white'>
+							<button
+								className='border-r py-2 px-3 rounded-tl-lg rounded-bl-lg hover:bg-slate-50 active:bg-white'
+								onClick={decreaseCount}
+							>
 								<Minus size={22} />
 							</button>
 
-							<span className='text-xl font-semibold select-none'>12</span>
+							<span className='text-xl font-semibold select-none'>
+								{itemCount.currentCount}
+							</span>
 
-							<button className='border-l py-2 px-3 rounded-tr-lg rounded-br-lg hover:bg-slate-50 active:bg-white'>
+							<button
+								className='border-l py-2 px-3 rounded-tr-lg rounded-br-lg hover:bg-slate-50 active:bg-white'
+								onClick={increaseCount}
+							>
 								<Plus size={22} />
 							</button>
 						</div>
-						<button className='w-full px-8 py-[7px] transition-all font-semibold border border-black rounded-lg bg-black text-white hover:text-black hover:bg-white hover:border-gray-300 active:bg-black active:text-white md:px-3 lg:w-fit'>
+						<button
+							className='w-full px-8 py-[7px] transition-all font-semibold border border-black rounded-lg bg-black text-white hover:text-black hover:bg-white hover:border-gray-300 active:bg-black active:text-white md:px-3 lg:w-fit'
+							onClick={submitToCart}
+						>
 							Add to cart
 						</button>
 					</section>

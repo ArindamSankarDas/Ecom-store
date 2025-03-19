@@ -8,17 +8,18 @@ datasource db {
 }
 
 model Users {
-  id           String @id @default(uuid())
-  name         String @unique
-  email        String @unique
+  id           String      @id @default(uuid())
+  name         String      @unique
+  email        String      @unique
   password     String
-  refreshToken String @default("")
+  refreshToken String      @default("")
+  cart         CartItems[]
 }
 
 model Products {
-  id                  Int      @id @default(autoincrement())
-  title               String   @db.VarChar(100)
-  description         String   @db.VarChar(225)
+  id                  Int       @id @default(autoincrement())
+  title               String    @db.VarChar(100)
+  description         String    @db.VarChar(225)
   thumbnail           String
   stock               Int
   price               Int
@@ -40,4 +41,15 @@ model Reviews {
 
   productId Int?
   product   Products? @relation(fields: [productId], references: [id])
+}
+
+model CartItems {
+  id               String  @id @default(uuid())
+  Users            Users?  @relation(fields: [usersId], references: [id])
+  usersId          String?
+  productName      String
+  productQty       Int
+  productPrice     Int
+  productCategory  String
+  productThumbnail String
 }

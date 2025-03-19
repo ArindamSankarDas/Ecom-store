@@ -1,4 +1,4 @@
-import { loginFormData } from '@lib/types';
+import { LoginFormData } from '@lib/types';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import { Label } from '@components/ui/label';
@@ -19,14 +19,14 @@ const LoginPage = () => {
 		register,
 		handleSubmit,
 		reset,
-	} = useForm<loginFormData>({
+	} = useForm<LoginFormData>({
 		defaultValues: {
 			email: '',
 			password: '',
 		},
 	});
 
-	const onSubmint = function (signInData: loginFormData) {
+	const onSubmint = function (signInData: LoginFormData) {
 		loginUser(signInData)
 			.then((data: { accessToken: string }) => {
 				login(data.accessToken);

@@ -7,17 +7,13 @@ function verifyJWT(req, res, next) {
 
 	const token = authorization.split(' ')[1];
 
-	jwt.verify(
-		token,
-		process.env.ACCESS_TOKEN_SECRET,
-		function (err, decodedData) {
-			if (err) return res.sendStatus(403);
+	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
+		if (err) return res.sendStatus(403);
 
-			req.user = decodedData.username;
+		req.email = decoded.email;
 
-			next();
-		}
-	);
+		next();
+	});
 }
 
 export default verifyJWT;

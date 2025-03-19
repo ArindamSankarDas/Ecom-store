@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import AppLayout from '@components/Layout/AppLayout';
 import ProductsLayout from '@components/Layout/ProductsLayout';
-import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import ProtectedRoute from '@components/ProtectedRoute/ProtectedRoute';
 
 import HomePage from '@pages/HomePage';
 import ContactPage from '@pages/ContactPage';
@@ -14,53 +14,60 @@ import SignUpPage from '@pages/SignUpPage';
 import ProfilePage from '@pages/ProfilePage';
 
 import { useFetchCategoryList } from '@hooks/useProducts';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider } from '@context/AuthContext';
+import { CartProvider } from '@context/CartContext';
 
 const App = () => {
 	const categoryList = useFetchCategoryList();
 
 	return (
 		<AuthProvider>
-			<Routes>
-				{/* Main layout for WebApp altogether */}
-				<Route path='/' element={<AppLayout />}>
-					{/* Routes to the main page on load, i.e. HomePage(/) */}
-					<Route index element={<HomePage />} />
-					{/* Routes to the Products(/shop) route which has another layout on top of AppLayout  */}
-					<Route
-						path='shop'
-						element={<ProductsLayout categoryList={categoryList} />}
-					>
-						{/* Reroutes it to /shop/all using Navigate to replace the history stack  */}
-						<Route index element={<Navigate to='all' replace />} />
-						{/* Dynamic routing of the product category(/shop/category) which is received from the categoryList */}
-						{categoryList.map((routeElem, index) => (
-							<Route
-								key={index}
-								path={routeElem}
-								element={<ShopPage currentPath={routeElem} />}
-							>
-								{/* Route for single product(/shop/category/:id) items using product id  */}
-								<Route index path=':id' element={<ProductItemPage />} />
-							</Route>
-						))}
-					</Route>
+			<CartProvider>
+				<Routes>
+					{/* Main layout for WebApp altogether */}
+					<Route path='/' element={<AppLayout />}>
+						{/* Routes to the main page on load, i.e. HomePage(/) */}
+						<Route index element={<HomePage />} />
+						{/* Routes to the Products(/shop) route which has another layout on top of AppLayout  */}
+						<Route
+							path='shop'
+							element={<ProductsLayout categoryList={categoryList} />}
+						>
+							{/* Reroutes it to /shop/all using Navigate to replace the history stack  */}
+							<Route index element={<Navigate to='all' replace />} />
+							{/* Dynamic routing of the product category(/shop/category) which is received from the categoryList */}
+							{categoryList.map((routeElem, index) => (
+								<Route
+									key={index}
+									path={routeElem}
+									element={<ShopPage currentPath={routeElem} />}
+								>
+									{/* Route for single product(/shop/category/:id) items using product id  */}
 
-					{/* Routes to the contact when clicked on, i.e. ContactPage(/contact) */}
-					<Route path='contact' element={<ContactPage />} />
-					{/* Routes to the cart when clicked on, i.e. CartPage(/cart) */}
-					<Route path='cart' element={<CartPage />} />
-					{/* Routes to the login when clicked on, i.e. LoginPage(/login) */}
-					<Route path='login' element={<LoginPage />} />
-					{/* Routes to the signup when clicked on, i.e. SignUpPage(/signup) */}
-					<Route path='signup' element={<SignUpPage />} />
+									<Route index path=':id' element={<ProductItemPage />} />
+								</Route>
+							))}
+						</Route>
 
-					{/* Route Protection */}
-					<Route element={<ProtectedRoute />}>
-						<Route path='/profile' element={<ProfilePage />} />
+						{/* Routes to the contact when clicked on, i.e. ContactPage(/contact) */}
+						<Route path='contact' element={<ContactPage />} />
+
+						{/* Routes to the login when clicked on, i.e. LoginPage(/login) */}
+						<Route path='login' element={<LoginPage />} />
+						{/* Routes to the signup when clicked on, i.e. SignUpPage(/signup) */}
+						<Route path='signup' element={<SignUpPage />} />
+
+						{/* Route Protection */}
+						<Route element={<ProtectedRoute />}>
+							{/* Routes to the profile when clicked on, i.e. ProfilePage(/profile) */}
+							<Route path='/profile' element={<ProfilePage />} />
+							{/* Routes to the cart when clicked on, i.e. CartPage(/cart) */}
+
+							<Route path='/cart' element={<CartPage />} />
+						</Route>
 					</Route>
-				</Route>
-			</Routes>
+				</Routes>
+			</CartProvider>
 		</AuthProvider>
 	);
 };

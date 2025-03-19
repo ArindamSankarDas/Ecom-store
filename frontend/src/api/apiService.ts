@@ -1,4 +1,4 @@
-import { SignUpFormData, loginFormData } from '@/lib/types';
+import { SignUpFormData, LoginFormData, CartItem } from '@lib/types';
 
 const BASE_URL = import.meta.env.VITE_BASE_API_URL;
 
@@ -60,7 +60,7 @@ export const signUpUser = async function (signUpData: SignUpFormData) {
 	}
 };
 
-export const loginUser = async function (loginData: loginFormData) {
+export const loginUser = async function (loginData: LoginFormData) {
 	try {
 		const response = await fetch(`${BASE_URL}/auth/login`, {
 			method: 'POST',
@@ -83,6 +83,9 @@ export const logoutUser = async function () {
 	try {
 		const response = await fetch(`${BASE_URL}/auth/logout`, {
 			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+			},
 			credentials: 'include',
 		});
 
@@ -91,6 +94,48 @@ export const logoutUser = async function () {
 		} else {
 			console.error('Logout failed');
 		}
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+//Cart
+export const addToCart = async function (
+	itemInfo: CartItem,
+	token: string | null
+) {
+	try {
+		const response = await fetch(`${BASE_URL}/cart`, {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+				Authorization: `Bearer ${token}`,
+			},
+			credentials: 'include',
+			body: JSON.stringify({ ...itemInfo }),
+		});
+
+		const result = await response.json();
+
+		return result;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+export const getCartData = async function (accessToken: string | null) {
+	try {
+		const response = await fetch(`${BASE_URL}/cart`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+			credentials: 'include',
+		});
+
+		const result = await response.json();
+
+		return result;
 	} catch (error) {
 		console.log(error);
 	}

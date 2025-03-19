@@ -6,6 +6,7 @@ import rootRoute from './routes/root.js';
 import authRoute from './routes/auth.js';
 import searchRoute from './routes/search.js';
 import categoryRoute from './routes/category.js';
+import cartRoute from './routes/cart.js';
 
 import requestLogger from './middlewares/reqLogger.js';
 import errorLogger from './middlewares/errLogger.js';
@@ -37,6 +38,7 @@ app.use(cookieParser());
 app.use('/auth', authRoute);
 app.use('/category', categoryRoute);
 app.use('/search', searchRoute);
+app.use('/cart', cartRoute);
 app.use('/', rootRoute);
 
 // handles 404 routes

@@ -25,6 +25,7 @@ export type ProductItemDetails = {
 	returnPolicy: string;
 	warrantyInformation: string;
 	shippingInformation: string;
+	category: string;
 };
 
 export type SignUpFormData = {
@@ -34,7 +35,7 @@ export type SignUpFormData = {
 	confirmPassword: string;
 };
 
-export type loginFormData = {
+export type LoginFormData = {
 	email: string;
 	password: string;
 };
@@ -44,4 +45,12 @@ export type AuthState = {
 	login: (token: string) => void;
 	logout: () => void;
 	isAuthenticated: boolean;
+};
+
+export type CartItem = {
+	productName: string;
+	productQty: number;
+	productPrice: number;
+	productCategory: string;
+	productThumbnail: string;
 };

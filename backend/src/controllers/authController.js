@@ -103,7 +103,7 @@ export function refreshTokenUser(req, res) {
 		refreshToken,
 		process.env.REFRESH_TOKEN_SECRET,
 		function (err, decoded) {
-			if (err) return res.sendStatus(406);
+			if (err) return res.sendStatus(401);
 
 			const accessToken = jwt.sign(
 				{ name: decoded.name },
