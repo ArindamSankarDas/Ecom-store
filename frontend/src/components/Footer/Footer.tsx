@@ -1,4 +1,4 @@
-const Footer = () => {
+function Footer() {
 	return (
 		<footer className='mt-auto bg-black space-y-10 text-white'>
 			<section className='px-10 py-8 footer-content-container footer-6:desk-footer-content-container lg:gap-40'>
@@ -34,5 +34,5 @@ const Footer = () => {
 			</p>
 		</footer>
 	);
-};
+}
 export default Footer;

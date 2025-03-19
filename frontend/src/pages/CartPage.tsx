@@ -4,7 +4,7 @@ import { Card, CardContent } from '@components/ui/card';
 
 import { useCart } from '@context/CartContext';
 
-const CartPage = () => {
+function CartPage() {
 	const { cartItems } = useCart();
 
 	return (
@@ -60,5 +60,5 @@ const CartPage = () => {
 			</section>
 		</main>
 	);
-};
+}
 export default CartPage;

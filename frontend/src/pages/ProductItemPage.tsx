@@ -1,92 +1,21 @@
-import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { ChevronLeft, Minus, Plus, RefreshCw, Star, Truck } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@components/ui/button';
-import { useFetchProductItem } from '@hooks/useProducts';
-import { useAuth } from '@context/AuthContext';
-import { addToCart } from '@api/apiService';
-import { useCart } from '@context/CartContext';
+import useProductCounter from '@hooks/useProductCounter';
 
-const ProductItemPage = () => {
-	const { setCart } = useCart();
+function ProductItemPage() {
 	const navigate = useNavigate();
 	const { id } = useParams();
 
-	const { accessToken, isAuthenticated } = useAuth();
-
-	const { productDetails, reviews } = useFetchProductItem(id);
-	const [itemCount, setItemCount] = useState({
-		currentCount: productDetails?.stock ? 1 : 0,
-		totalCount: productDetails?.stock || 0,
-	});
-
-	useEffect(() => {
-		if (productDetails?.stock !== undefined) {
-			setItemCount(function (prevstate) {
-				return {
-					...prevstate,
-					currentCount: 1,
-					totalCount: productDetails.stock,
-				};
-			});
-		}
-	}, [productDetails?.stock]);
-
-	function increaseCount() {
-		if (itemCount.currentCount + 1 > itemCount.totalCount) return;
-
-		setItemCount(function (prevstate) {
-			return {
-				...prevstate,
-				currentCount: prevstate.currentCount + 1,
-			};
-		});
-	}
-
-	function decreaseCount() {
-		if (itemCount.currentCount - 1 < 1) return;
-
-		setItemCount(function (prevstate) {
-			return {
-				...prevstate,
-				currentCount: prevstate.currentCount - 1,
-			};
-		});
-	}
-
-	function submitToCart() {
-		if (!isAuthenticated) {
-			alert('Please login first');
-			return;
-		}
-
-		if (
-			!(
-				productDetails?.title &&
-				productDetails?.price &&
-				productDetails?.thumbnail &&
-				productDetails?.thumbnail &&
-				productDetails?.category
-			)
-		) {
-			alert('Property on product not present');
-			return;
-		}
-
-		addToCart(
-			{
-				productCategory: productDetails.category,
-				productThumbnail: productDetails.thumbnail,
-				productName: productDetails.title,
-				productPrice: productDetails.price,
-				productQty: itemCount.currentCount,
-			},
-			accessToken
-		).then((data) => {
-			setCart(data);
-		});
-	}
+	const {
+		decreaseCount,
+		increaseCount,
+		productDetails,
+		reviews,
+		itemCount,
+		submitToCart,
+	} = useProductCounter(id);
 
 	return (
 		<div
@@ -215,5 +144,5 @@ const ProductItemPage = () => {
 			</section>
 		</div>
 	);
-};
+}
 export default ProductItemPage;

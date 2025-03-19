@@ -17,7 +17,7 @@ import { useFetchCategoryList } from '@hooks/useProducts';
 import { AuthProvider } from '@context/AuthContext';
 import { CartProvider } from '@context/CartContext';
 
-const App = () => {
+function App() {
 	const categoryList = useFetchCategoryList();
 
 	return (
@@ -70,5 +70,5 @@ const App = () => {
 			</CartProvider>
 		</AuthProvider>
 	);
-};
+}
 export default App;

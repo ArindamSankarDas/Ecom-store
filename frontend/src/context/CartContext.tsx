@@ -13,6 +13,10 @@ type CartContextItem = CartItem & {
 	id: string;
 };
 
+type Props = {
+	children: ReactNode;
+};
+
 type CartContextType = {
 	cartItems: CartContextItem[] | undefined;
 	setCart: (items: CartContextItem) => void;
@@ -20,9 +24,11 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export function CartProvider({ children }: { children: ReactNode }) {
+export function CartProvider({ children }: Props) {
 	const { accessToken } = useAuth();
-	const [cartItems, setCartItems] = useState<CartContextItem[] | undefined>(undefined);
+	const [cartItems, setCartItems] = useState<CartContextItem[] | undefined>(
+		undefined
+	);
 
 	useEffect(() => {
 		if (accessToken) {

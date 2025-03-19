@@ -25,7 +25,7 @@ import {
 
 import { useAuth } from '@context/AuthContext';
 
-const Header = () => {
+function Header() {
 	const navigate = useNavigate();
 	const { isAuthenticated, logout } = useAuth();
 	const [isToggled, setIsToggled] = useState(false);
@@ -193,6 +193,6 @@ const Header = () => {
 			</div>
 		</header>
 	);
-};
+}
 
 export default Header;

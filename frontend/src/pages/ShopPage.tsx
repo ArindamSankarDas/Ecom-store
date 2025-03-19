@@ -4,7 +4,11 @@ import { ButtonLoading } from '@components/ui/custom-buttons';
 import { Outlet, useParams } from 'react-router-dom';
 import { useFetchProducts } from '@hooks/useProducts';
 
-const ShopPage = ({ currentPath }: { currentPath: string }) => {
+type Props = {
+	currentPath: string;
+};
+
+function ShopPage({ currentPath }: Props) {
 	const { id } = useParams();
 
 	const { loading, products, setSkipCount } = useFetchProducts(currentPath);
@@ -55,5 +59,5 @@ const ShopPage = ({ currentPath }: { currentPath: string }) => {
 			)}
 		</>
 	);
-};
+}
 export default ShopPage;

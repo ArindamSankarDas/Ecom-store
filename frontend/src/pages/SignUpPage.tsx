@@ -8,7 +8,7 @@ import { SignUpFormData } from '@lib/types';
 import { signUpUser } from '@api/apiService';
 import { useAuth } from '@context/AuthContext';
 
-const SignUpPage = () => {
+function SignUpPage() {
 	const { login, isAuthenticated } = useAuth();
 	const navigate = useNavigate();
 
@@ -177,5 +177,5 @@ const SignUpPage = () => {
 			</Card>
 		</main>
 	);
-};
+}
 export default SignUpPage;

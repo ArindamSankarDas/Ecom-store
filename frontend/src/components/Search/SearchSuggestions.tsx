@@ -12,12 +12,12 @@ type Props = {
 	handleSearchInputValue: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const SearchSuggestions: React.FC<Props> = ({
+function SearchSuggestions({
 	searchToggle,
 	searchValue,
 	handleSearchToggle,
 	handleSearchInputValue,
-}) => {
+}: Props) {
 	const { loading, suggestions } = useFetchProductSuggestions(searchValue);
 
 	return (
@@ -56,5 +56,5 @@ const SearchSuggestions: React.FC<Props> = ({
 			</section>
 		)
 	);
-};
+}
 export default SearchSuggestions;

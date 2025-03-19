@@ -11,7 +11,7 @@ import { loginUser } from '@api/apiService';
 
 import { useAuth } from '@context/AuthContext';
 
-const LoginPage = () => {
+function LoginPage() {
 	const navigate = useNavigate();
 	const { login, isAuthenticated } = useAuth();
 	const {
@@ -134,5 +134,5 @@ const LoginPage = () => {
 			</Card>
 		</main>
 	);
-};
+}
 export default LoginPage;

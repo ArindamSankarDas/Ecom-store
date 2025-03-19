@@ -1,7 +1,7 @@
 import { Button } from '@components/ui/button';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 
-type CartItemProps = {
+type Props = {
 	productName: string;
 	productCategory: string;
 	productPrice: number;
@@ -9,13 +9,13 @@ type CartItemProps = {
 	productThumbnail: string;
 };
 
-const CartItem = ({
+function CartItem({
 	productName,
 	productCategory,
 	productPrice,
 	productQty,
 	productThumbnail,
-}: CartItemProps) => {
+}: Props) {
 	return (
 		<div
 			id='cart-item'
@@ -55,5 +55,5 @@ const CartItem = ({
 			</div>
 		</div>
 	);
-};
+}
 export default CartItem;

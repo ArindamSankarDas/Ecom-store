@@ -8,9 +8,13 @@ import {
 	ReactNode,
 } from 'react';
 
+type Props = {
+	children: ReactNode;
+};
+
 const AuthContext = createContext<AuthState | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: Props) {
 	const [accessToken, setAccessToken] = useState<string | null>(() => {
 		return localStorage.getItem('access-token') || null;
 	});
