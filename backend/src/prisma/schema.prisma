@@ -45,8 +45,9 @@ model Reviews {
 
 model CartItems {
   id               String  @id @default(uuid())
-  Users            Users?  @relation(fields: [usersId], references: [id])
+  Users            Users?  @relation(fields: [usersId], references: [id], onDelete: Cascade)
   usersId          String?
+  productId        Int
   productName      String
   productQty       Int
   productPrice     Int

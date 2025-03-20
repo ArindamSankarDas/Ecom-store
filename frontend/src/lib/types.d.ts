@@ -53,4 +53,5 @@ export type CartItem = {
 	productPrice: number;
 	productCategory: string;
 	productThumbnail: string;
+	productId: number | undefined;
 };

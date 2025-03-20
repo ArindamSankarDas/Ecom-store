@@ -11,7 +11,6 @@ import { CartItem } from '@lib/types';
 
 type CartContextItem = CartItem & {
 	id: string;
-	productId: number;
 };
 
 type Props = {

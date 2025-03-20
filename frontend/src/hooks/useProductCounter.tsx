@@ -70,6 +70,7 @@ function useProductCounter(productId?: number, cartItemQty?: number) {
 
 		addToCart(
 			{
+				productId,
 				productCategory: productDetails.category,
 				productThumbnail: productDetails.thumbnail,
 				productName: productDetails.title,
@@ -78,7 +79,7 @@ function useProductCounter(productId?: number, cartItemQty?: number) {
 			},
 			accessToken
 		).then((data) => {
-			setCart({ ...data, productId });
+			setCart(data);
 		});
 	}
 

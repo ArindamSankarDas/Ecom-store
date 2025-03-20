@@ -6,6 +6,7 @@ import { Button } from '@components/ui/button';
 import { useCart } from '@context/CartContext';
 import { useAuth } from '@context/AuthContext';
 import useProductCounter from '@hooks/useProductCounter';
+import { useState } from 'react';
 
 type Props = {
 	productId: number;
@@ -28,6 +29,7 @@ function CartItem({
 }: Props) {
 	const { removeItem, setCart } = useCart();
 	const { accessToken } = useAuth();
+	const [loading, setLoading] = useState(false);
 
 	const { increaseCount, decreaseCount, itemCount } = useProductCounter(
 		productId,
@@ -35,20 +37,67 @@ function CartItem({
 	);
 
 	function add() {
-		increaseCount();
+		setLoading(true);
 
 		addToCart(
 			{
+				productId,
 				productCategory: cartItemCategory,
 				productName: cartItemName,
 				productPrice: cartItemPrice,
 				productThumbnail: cartItemThumbnail,
-				productQty: itemCount.currentCount,
+				productQty: 1,
 			},
 			accessToken
-		).then(function (data) {
-			setCart({ ...data, productId });
-		});
+		)
+			.then(function (data) {
+				increaseCount();
+
+				return data;
+			})
+			.then(function (data) {
+				if (data.msg) {
+					alert(data.msg);
+					return;
+				}
+
+				setCart(data);
+			})
+			.finally(function () {
+				setLoading(false);
+			});
+	}
+
+	function sub() {
+		setLoading(true);
+
+		addToCart(
+			{
+				productId,
+				productCategory: cartItemCategory,
+				productName: cartItemName,
+				productPrice: cartItemPrice,
+				productThumbnail: cartItemThumbnail,
+				productQty: -1,
+			},
+			accessToken
+		)
+			.then(function (data) {
+				decreaseCount();
+
+				return data;
+			})
+			.then(function (data) {
+				if (data.msg) {
+					alert(data.msg);
+					return;
+				}
+
+				setCart(data);
+			})
+			.finally(function () {
+				setLoading(false);
+			});
 	}
 
 	return (
@@ -72,7 +121,11 @@ function CartItem({
 					<span className='font-bold'>${cartItemPrice}</span>
 					<div className='flex justify-center items-center gap-2'>
 						<div className='w-fit flex justify-center items-center gap-4 border rounded-lg'>
-							<button className='border-r py-1 px-2 rounded-tl-lg rounded-bl-lg hover:bg-slate-50 active:bg-white'>
+							<button
+								className='border-r py-1 px-2 rounded-tl-lg rounded-bl-lg hover:bg-slate-50 active:bg-white'
+								onClick={sub}
+								disabled={loading || itemCount.currentCount - 1 < 1}
+							>
 								<Minus size={18} onClick={decreaseCount} />
 							</button>
 
@@ -83,6 +136,9 @@ function CartItem({
 							<button
 								className='border-l py-1 px-2 rounded-tr-lg rounded-br-lg hover:bg-slate-50 active:bg-white'
 								onClick={add}
+								disabled={
+									loading || itemCount.currentCount === itemCount.totalCount
+								}
 							>
 								<Plus size={18} />
 							</button>
