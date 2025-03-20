@@ -9,7 +9,9 @@ function CartPage() {
 
 	return (
 		<main className='flex-1 px-4 py-10 lg:px-20 lg:pb-32'>
-			<h1 className='text-3xl font-bold mb-5 lg:text-4xl lg:mb-7'>Your Cart</h1>
+			<h1 className='text-3xl font-bold mb-5 lg:text-4xl lg:mb-7'>
+				{cartItems?.length ? 'Your Cart' : 'Your Cart is Empty'}
+			</h1>
 
 			<section id='cart-body' className='w-full lg:flex lg:gap-5'>
 				<section
@@ -20,11 +22,13 @@ function CartPage() {
 						return (
 							<CartItem
 								key={elem.id}
-								productCategory={elem.productCategory}
-								productName={elem.productName}
-								productPrice={elem.productPrice}
-								productQty={elem.productQty}
-								productThumbnail={elem.productThumbnail}
+								productId={elem.productId}
+								cartItemId={elem.id}
+								cartItemCategory={elem.productCategory}
+								cartItemName={elem.productName}
+								cartItemPrice={elem.productPrice}
+								cartItemThumbnail={elem.productThumbnail}
+								cartItemQty={elem.productQty}
 							/>
 						);
 					})}

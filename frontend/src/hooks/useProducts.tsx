@@ -54,7 +54,7 @@ export function useFetchProductSuggestions(query: string) {
 	return { suggestions, loading };
 }
 
-export function useFetchProductItem(productId: string | undefined) {
+export function useFetchProductItem(productId: number | undefined) {
 	const [productDetails, setProductDetails] = useState<ProductItemDetails>();
 
 	const [reviews, setReviews] = useState({

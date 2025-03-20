@@ -4,14 +4,14 @@ import { addToCart } from '@api/apiService';
 import { useCart } from '@context/CartContext';
 import { useAuth } from '@context/AuthContext';
 
-function useProductCounter(productId: string | undefined) {
+function useProductCounter(productId?: number, cartItemQty?: number) {
 	const { accessToken, isAuthenticated } = useAuth();
 	const { setCart } = useCart();
 
 	const { productDetails, reviews } = useFetchProductItem(productId);
 
 	const [itemCount, setItemCount] = useState({
-		currentCount: productDetails?.stock ? 1 : 0,
+		currentCount: productDetails?.stock ? cartItemQty || 1 : 0,
 		totalCount: productDetails?.stock || 0,
 	});
 
@@ -20,12 +20,12 @@ function useProductCounter(productId: string | undefined) {
 			setItemCount(function (prevstate) {
 				return {
 					...prevstate,
-					currentCount: 1,
+					currentCount: cartItemQty || 1,
 					totalCount: productDetails.stock,
 				};
 			});
 		}
-	}, [productDetails?.stock]);
+	}, [productDetails?.stock, cartItemQty]);
 
 	function increaseCount() {
 		if (itemCount.currentCount + 1 > itemCount.totalCount) return;
@@ -78,7 +78,7 @@ function useProductCounter(productId: string | undefined) {
 			},
 			accessToken
 		).then((data) => {
-			setCart(data);
+			setCart({ ...data, productId });
 		});
 	}
 

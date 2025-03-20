@@ -7,6 +7,7 @@ import useProductCounter from '@hooks/useProductCounter';
 function ProductItemPage() {
 	const navigate = useNavigate();
 	const { id } = useParams();
+	const productId = id ? parseInt(id, 10) : 0;
 
 	const {
 		decreaseCount,
@@ -15,7 +16,7 @@ function ProductItemPage() {
 		reviews,
 		itemCount,
 		submitToCart,
-	} = useProductCounter(id);
+	} = useProductCounter(productId);
 
 	return (
 		<div

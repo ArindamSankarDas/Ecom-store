@@ -1,3 +1,4 @@
+import useProductCounter from '@hooks/useProductCounter';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -15,6 +16,8 @@ function ProductCard({
 	itemTitle,
 	itemCategory,
 }: Props) {
+	const { submitToCart } = useProductCounter(itemId);
+
 	return (
 		<article
 			id='product-card'
@@ -49,6 +52,7 @@ function ProductCard({
 			<button
 				id='add-to-cart'
 				className='mt-5 bg-black text-white px-2 py-2 mx-3 rounded-md transition-all border border-black hover:bg-white hover:text-black hover:border-gray-300 font-semibold active:bg-black active:text-white'
+				onClick={submitToCart}
 			>
 				Add to Cart
 			</button>

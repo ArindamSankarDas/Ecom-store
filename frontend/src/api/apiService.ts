@@ -25,7 +25,7 @@ export const fetchProductSuggestions = async function (query: string) {
 	return result.products;
 };
 
-export const fetchProductItem = async function (productId: string | undefined) {
+export const fetchProductItem = async function (productId: number | undefined) {
 	const response = await fetch(`${BASE_URL}/${productId}`);
 
 	const result = await response.json();
@@ -136,6 +136,31 @@ export const getCartData = async function (accessToken: string | null) {
 		const result = await response.json();
 
 		return result;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+export const deleteCartData = async function (
+	id: string,
+	accessToken: string | null
+) {
+	try {
+		const response = await fetch(`${BASE_URL}/cart`, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-type': 'application/json',
+			},
+			body: JSON.stringify({ cartItemId: id }),
+			credentials: 'include',
+		});
+
+		if (response.ok) {
+			console.log('Item deleted');
+		} else {
+			console.error('Item not deleted');
+		}
 	} catch (error) {
 		console.log(error);
 	}

@@ -11,6 +11,7 @@ import { CartItem } from '@lib/types';
 
 type CartContextItem = CartItem & {
 	id: string;
+	productId: number;
 };
 
 type Props = {
@@ -20,6 +21,7 @@ type Props = {
 type CartContextType = {
 	cartItems: CartContextItem[] | undefined;
 	setCart: (items: CartContextItem) => void;
+	removeItem: (itemId: string) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -39,12 +41,29 @@ export function CartProvider({ children }: Props) {
 	}, [accessToken]);
 
 	const setCart = (item: CartContextItem) => {
-		setCartItems((prevState) => [...(prevState ?? []), item]);
+		setCartItems((prevState) => {
+			const filteredData = prevState?.filter(function (elem) {
+				return elem.productName !== item.productName;
+			});
+
+			return [item, ...(filteredData ?? [])];
+		});
+	};
+
+	const removeItem = (itemId: string) => {
+		setCartItems((prevState) => {
+			const filteredData = prevState?.filter(function (elem) {
+				return elem.id !== itemId;
+			});
+
+			return [...(filteredData ?? [])];
+		});
 	};
 
 	const value: CartContextType = {
 		cartItems,
 		setCart,
+		removeItem,
 	};
 
 	return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

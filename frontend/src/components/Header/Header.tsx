@@ -24,10 +24,12 @@ import {
 } from '@components/ui/dropdown-menu';
 
 import { useAuth } from '@context/AuthContext';
+import { useCart } from '@context/CartContext';
 
 function Header() {
 	const navigate = useNavigate();
 	const { isAuthenticated, logout } = useAuth();
+	const { cartItems } = useCart();
 	const [isToggled, setIsToggled] = useState(false);
 	const [isSearchActive, setIsSearchActive] = useState(false);
 	const [searchInputValue, setSearchInputValue] = useState('');
@@ -106,9 +108,14 @@ function Header() {
 
 					{/* shopping cart */}
 					<div className='relative z-2 top-[0%] cursor-pointer select-none transition-all hover:-top-[10%]'>
-						<span className='absolute -top-2 -right-2 text-[12px] bg-red-600 font-semibold text-white py-[0.90px] px-[6px] rounded-full'>
-							6
-						</span>
+						{!(cartItems?.length && isAuthenticated) ? null : (
+							<span className='absolute -top-2 -right-2 text-[12px] bg-red-600 font-semibold text-white py-[0.90px] px-[6px] rounded-full'>
+								{cartItems?.reduce(function (total, elem) {
+									return total + elem.productQty;
+								}, 0)}
+							</span>
+						)}
+
 						<NavLink to={'/cart'}>
 							{({ isActive }) =>
 								isActive ? (
