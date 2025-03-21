@@ -99,6 +99,97 @@ export const logoutUser = async function () {
 	}
 };
 
+export const getCurrentUser = async function (accessToken: string | null) {
+	try {
+		const response = await fetch(`${BASE_URL}/auth/user`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+			credentials: 'include',
+		});
+
+		const result = await response.json();
+
+		return result;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+export const updateCurrentUser = async function (
+	name: string,
+	accessToken: string | null
+) {
+	try {
+		const response = await fetch(`${BASE_URL}/auth/user`, {
+			method: 'PATCH',
+			headers: {
+				'Content-type': 'application/json',
+				Authorization: `Bearer ${accessToken}`,
+			},
+			credentials: 'include',
+			body: JSON.stringify({ name }),
+		});
+
+		const result = await response.json();
+
+		return result;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+export const updateCurrentPassword = async function (
+	passwordChanges: { currentPassword: string; newPassword: string },
+	accessToken: string | null
+) {
+	try {
+		const response = await fetch(`${BASE_URL}/auth/password`, {
+			method: 'PATCH',
+			headers: {
+				'Content-type': 'application/json',
+				Authorization: `Bearer ${accessToken}`,
+			},
+			credentials: 'include',
+			body: JSON.stringify({
+				password: passwordChanges.newPassword,
+				currentPassword: passwordChanges.currentPassword,
+			}),
+		});
+
+		const result = await response.json();
+
+		return result;
+	} catch (error) {
+		console.log(error);
+	}
+};
+export const deleteUser = async function (
+	password: string,
+	accessToken: string | null
+) {
+	try {
+		const response = await fetch(`${BASE_URL}/auth/user`, {
+			method: 'DELETE',
+			headers: {
+				'Content-type': 'application/json',
+				Authorization: `Bearer ${accessToken}`,
+			},
+			credentials: 'include',
+			body: JSON.stringify({
+				password,
+			}),
+		});
+
+		const result = await response.json();
+
+		return result;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 //Cart
 export const addToCart = async function (
 	itemInfo: CartItem,

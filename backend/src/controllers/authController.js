@@ -6,7 +6,7 @@ export async function registerUser(req, res, next) {
 		const { name, email, password } = req.body;
 
 		if (!name || !email || !password) {
-			return res.status(400).json({ msg: 'Details not given' });
+			return res.status(400).json({ msg: 'Details not given ' });
 		}
 
 		const foundUser = await prisma.users.findFirst({
@@ -155,5 +155,119 @@ export async function logoutUser(req, res) {
 	} catch (error) {
 		console.error('Logout Error:', error);
 		res.status(500).json({ msg: 'Internal Server Error' });
+	}
+}
+
+export async function currentUser(req, res, next) {
+	try {
+		const email = req.email;
+
+		const foundUser = await prisma.users.findFirst({
+			where: { email },
+			select: {
+				name: true,
+			},
+		});
+
+		res.status(200).json(foundUser);
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function updateCurrentUserDetails(req, res, next) {
+	try {
+		const { name } = req.body;
+
+		if (!name) {
+			return res.status(400).json({ msg: 'Details not given' });
+		}
+
+		const email = req.email;
+
+		const foundUser = await prisma.users.findFirst({
+			where: { email },
+			select: { name: true },
+		});
+
+		if (foundUser.name === name) {
+			return res.status(400).json({ msg: 'Details are still the same' });
+		}
+
+		await prisma.users.update({
+			where: { email },
+			data: {
+				name,
+			},
+		});
+
+		res.status(200).json({ msg: 'User Name updated' });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function updateCurrentPasswordDetails(req, res, next) {
+	try {
+		const { password, currentPassword } = req.body;
+
+		if (!(password && currentPassword)) {
+			return res.status(400).json({ msg: 'Details not given' });
+		}
+
+		const email = req.email;
+
+		const foundUser = await prisma.users.findFirst({
+			where: { email },
+			select: { password: true },
+		});
+
+		if (foundUser.password !== currentPassword) {
+			return res.status(400).json({ msg: 'Current password did not match' });
+		}
+
+		await prisma.users.update({
+			where: { email },
+			data: {
+				password,
+			},
+		});
+
+		res.status(200).json({ msg: 'Password updated' });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function deleteCurrentUser(req, res, next) {
+	try {
+		const { password } = req.body;
+
+		if (!password) {
+			return res.status(400).json({ msg: 'Password is required' });
+		}
+
+		const email = req.email;
+
+		const foundUser = await prisma.users.findFirst({
+			where: { email },
+			select: { password: true, id: true },
+		});
+
+		if (!foundUser) {
+			return res.status(404).json({ msg: 'User not found' });
+		}
+
+		if (foundUser.password !== password) {
+			return res.status(400).json({ msg: 'Current password did not match' });
+		}
+
+		await prisma.users.delete({
+			where: { id: foundUser.id },
+		});
+
+		return res.status(200).json({ msg: 'User deleted successfully' });
+	} catch (error) {
+		next(error);
 	}
 }

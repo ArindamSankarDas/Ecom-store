@@ -1,3 +1,10 @@
+import {
+	deleteUser,
+	getCurrentUser,
+	updateCurrentPassword,
+	updateCurrentUser,
+	logoutUser,
+} from '@api/apiService';
 import { Button } from '@components/ui/button';
 import {
 	Card,
@@ -12,8 +19,56 @@ import { Input } from '@components/ui/input';
 import { Label } from '@components/ui/label';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
+import { useAuth } from '@context/AuthContext';
+import { useEffect, useState } from 'react';
 
 function ProfilePage() {
+	const [userName, setUserName] = useState('');
+	const [passwordChanges, setPasswordChanges] = useState({
+		currentPassword: '',
+		newPassword: '',
+	});
+	const [deletePassword, setDeletePassword] = useState('');
+
+	const { accessToken } = useAuth();
+	const { logout } = useAuth();
+
+	useEffect(
+		function () {
+			getCurrentUser(accessToken).then(function name(data) {
+				setUserName(data.name);
+			});
+		},
+		[accessToken]
+	);
+
+	function saveNameChanges() {
+		updateCurrentUser(userName, accessToken);
+	}
+
+	function savePasswordChanges() {
+		updateCurrentPassword(passwordChanges, accessToken).then(function () {
+			setPasswordChanges({
+				currentPassword: '',
+				newPassword: '',
+			});
+		});
+	}
+
+	function confirmDeleteAccount() {
+		deleteUser(deletePassword, accessToken)
+			.then(function (data) {
+				
+				console.log(data);
+				setDeletePassword('');
+			})
+			.then(function () {
+				logoutUser().then(function () {
+					logout();
+				});
+			});
+	}
+
 	return (
 		<div className='py-20 w-full flex justify-center items-center'>
 			<Tabs defaultValue='account' className='w-[400px]'>
@@ -33,19 +88,17 @@ function ProfilePage() {
 						<CardContent className='space-y-2'>
 							<div className='space-y-1'>
 								<Label htmlFor='name'>Name</Label>
-								<Input id='name' defaultValue='Arindam Sankar Das' />
-							</div>
-							<div className='space-y-1'>
-								<Label htmlFor='email'>Email</Label>
 								<Input
-									id='email'
-									type='email'
-									defaultValue='arindam@gmail.com'
+									id='name'
+									defaultValue={userName}
+									onChange={(e) => {
+										setUserName(e.target.value);
+									}}
 								/>
 							</div>
 						</CardContent>
 						<CardFooter>
-							<Button>Save changes</Button>
+							<Button onClick={saveNameChanges}>Save changes</Button>
 						</CardFooter>
 					</Card>
 				</TabsContent>
@@ -60,15 +113,37 @@ function ProfilePage() {
 						<CardContent className='space-y-2'>
 							<div className='space-y-1'>
 								<Label htmlFor='current'>Current password</Label>
-								<Input id='current' type='password' />
+								<Input
+									id='current'
+									type='password'
+									onChange={(e) => {
+										setPasswordChanges(function (prevState) {
+											return {
+												...prevState,
+												currentPassword: e.target.value,
+											};
+										});
+									}}
+								/>
 							</div>
 							<div className='space-y-1'>
 								<Label htmlFor='new'>New password</Label>
-								<Input id='new' type='password' />
+								<Input
+									id='new'
+									type='password'
+									onChange={(e) => {
+										setPasswordChanges(function (prevState) {
+											return {
+												...prevState,
+												newPassword: e.target.value,
+											};
+										});
+									}}
+								/>
 							</div>
 						</CardContent>
 						<CardFooter>
-							<Button>Save password</Button>
+							<Button onClick={savePasswordChanges}>Save password</Button>
 						</CardFooter>
 					</Card>
 				</TabsContent>
@@ -84,11 +159,19 @@ function ProfilePage() {
 						<CardContent>
 							<div className='space-y-1'>
 								<Label htmlFor='new'>Confirm password</Label>
-								<Input id='new' type='password' />
+								<Input
+									id='new'
+									type='password'
+									onChange={(e) => {
+										setDeletePassword(e.target.value);
+									}}
+								/>
 							</div>
 						</CardContent>
 						<CardFooter className='flex justify-end'>
-							<Button variant='destructive'>Delete Account</Button>
+							<Button variant='destructive' onClick={confirmDeleteAccount}>
+								Delete Account
+							</Button>
 						</CardFooter>
 					</Card>
 				</TabsContent>
