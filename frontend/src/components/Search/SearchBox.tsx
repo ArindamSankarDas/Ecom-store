@@ -31,6 +31,7 @@ function SearchBox({
 				placeholder='Search...'
 				value={searchValue}
 				onChange={(e) => handleSearchInputValue(e.target.value.toLowerCase())}
+				autoComplete='off'
 			/>
 			<X
 				size={35}

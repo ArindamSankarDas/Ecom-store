@@ -43,16 +43,13 @@ function CartPage() {
 							<h2 className='text-lg font-bold mb-4'>Order Summary</h2>
 							<div className='space-y-2'>
 								<div className='flex justify-between'>
-									<span>Subtotal</span>
-									<span>$39.97</span>
-								</div>
-								<div className='flex justify-between'>
-									<span>Shipping</span>
-									<span>$5.00</span>
-								</div>
-								<div className='flex justify-between font-bold'>
-									<span>Total</span>
-									<span>$44.97</span>
+									<span className='font-bold'>Total</span>
+									<span>
+										$
+										{cartItems?.reduce(function (total, elem) {
+											return total + elem.productPrice * elem.productQty;
+										}, 0)}
+									</span>
 								</div>
 							</div>
 							<Button className='w-full mt-4 bg-black text-white hover:bg-gray-800'>

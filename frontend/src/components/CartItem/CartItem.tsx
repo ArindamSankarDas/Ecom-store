@@ -9,7 +9,7 @@ import useProductCounter from '@hooks/useProductCounter';
 import { useState } from 'react';
 
 type Props = {
-	productId: number;
+	productId?: number;
 	cartItemId: string;
 	cartItemCategory: string;
 	cartItemName: string;

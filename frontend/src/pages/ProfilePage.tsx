@@ -17,9 +17,10 @@ function ProfilePage() {
 	return (
 		<div className='py-20 w-full flex justify-center items-center'>
 			<Tabs defaultValue='account' className='w-[400px]'>
-				<TabsList className='grid w-full grid-cols-2'>
+				<TabsList className='grid w-full grid-cols-3'>
 					<TabsTrigger value='account'>Account</TabsTrigger>
 					<TabsTrigger value='password'>Password</TabsTrigger>
+					<TabsTrigger value='delete'>Delete</TabsTrigger>
 				</TabsList>
 				<TabsContent value='account'>
 					<Card>
@@ -36,7 +37,11 @@ function ProfilePage() {
 							</div>
 							<div className='space-y-1'>
 								<Label htmlFor='email'>Email</Label>
-								<Input id='email' type='email' defaultValue='arindam@gmail.com' />
+								<Input
+									id='email'
+									type='email'
+									defaultValue='arindam@gmail.com'
+								/>
 							</div>
 						</CardContent>
 						<CardFooter>
@@ -64,6 +69,26 @@ function ProfilePage() {
 						</CardContent>
 						<CardFooter>
 							<Button>Save password</Button>
+						</CardFooter>
+					</Card>
+				</TabsContent>
+				<TabsContent value='delete'>
+					<Card>
+						<CardHeader>
+							<CardTitle>Delete Account</CardTitle>
+							<CardDescription>
+								Once you delete your account, there is no going back. Please be
+								certain.
+							</CardDescription>
+						</CardHeader>
+						<CardContent>
+							<div className='space-y-1'>
+								<Label htmlFor='new'>Confirm password</Label>
+								<Input id='new' type='password' />
+							</div>
+						</CardContent>
+						<CardFooter className='flex justify-end'>
+							<Button variant='destructive'>Delete Account</Button>
 						</CardFooter>
 					</Card>
 				</TabsContent>
