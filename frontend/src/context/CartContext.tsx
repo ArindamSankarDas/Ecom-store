@@ -6,7 +6,7 @@ import {
 	useEffect,
 } from 'react';
 import { useAuth } from '@context/AuthContext';
-import { getCartData } from '@api/apiService';
+import { getCartData, refreshTokenUser } from '@api/apiService';
 import { CartItem } from '@lib/types';
 
 type CartContextItem = CartItem & {
@@ -26,16 +26,24 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: Props) {
-	const { accessToken } = useAuth();
+	const { accessToken, login } = useAuth();
 	const [cartItems, setCartItems] = useState<CartContextItem[] | undefined>(
 		undefined
 	);
 
 	useEffect(() => {
 		if (accessToken) {
-			getCartData(accessToken).then((data) => {
-				setCartItems([...data.cart]);
-			});
+			getCartData(accessToken)
+				.then((data) => {
+					setCartItems([...data.cart]);
+				})
+				.catch(function (error) {
+					if (error.message === '403') {
+						refreshTokenUser().then(function (data) {
+							login(data.accessToken);
+						});
+					}
+				});
 		}
 	}, [accessToken]);
 

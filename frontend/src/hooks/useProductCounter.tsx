@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useFetchProductItem } from '@hooks/useProducts';
-import { addToCart } from '@api/apiService';
+import { addToCart, refreshTokenUser } from '@api/apiService';
 import { useCart } from '@context/CartContext';
 import { useAuth } from '@context/AuthContext';
 
 function useProductCounter(productId?: number, cartItemQty?: number) {
-	const { accessToken, isAuthenticated } = useAuth();
+	const { accessToken, isAuthenticated, login } = useAuth();
 	const { setCart } = useCart();
 
 	const { productDetails, reviews } = useFetchProductItem(productId);
@@ -78,9 +78,30 @@ function useProductCounter(productId?: number, cartItemQty?: number) {
 				productQty: itemCount.currentCount,
 			},
 			accessToken
-		).then((data) => {
-			setCart(data);
-		});
+		)
+			.then((data) => {
+				setCart(data);
+			})
+			.catch(function (error) {
+				if (error.message === '403') {
+					refreshTokenUser().then(function (data) {
+						login(data.accessToken);
+						addToCart(
+							{
+								productId,
+								productCategory: productDetails.category,
+								productThumbnail: productDetails.thumbnail,
+								productName: productDetails.title,
+								productPrice: productDetails.price,
+								productQty: itemCount.currentCount,
+							},
+							accessToken
+						).then((data) => {
+							setCart(data);
+						});
+					});
+				}
+			});
 	}
 
 	return {

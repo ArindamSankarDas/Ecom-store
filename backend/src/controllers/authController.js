@@ -59,7 +59,6 @@ export async function loginUser(req, res) {
 		const accessToken = jwt.sign(
 			{
 				email: foundUser.email,
-				name: foundUser.name,
 			},
 			process.env.ACCESS_TOKEN_SECRET,
 			{ expiresIn: '15m' }
@@ -68,7 +67,6 @@ export async function loginUser(req, res) {
 		const refreshToken = jwt.sign(
 			{
 				email: foundUser.email,
-				name: foundUser.name,
 			},
 			process.env.REFRESH_TOKEN_SECRET,
 			{ expiresIn: '30d' }
@@ -106,7 +104,7 @@ export function refreshTokenUser(req, res) {
 			if (err) return res.sendStatus(401);
 
 			const accessToken = jwt.sign(
-				{ name: decoded.name },
+				{ email: decoded.email },
 				process.env.ACCESS_TOKEN_SECRET,
 				{ expiresIn: '15m' }
 			);
@@ -185,6 +183,8 @@ export async function updateCurrentUserDetails(req, res, next) {
 
 		const email = req.email;
 
+		console.log(email);
+
 		const foundUser = await prisma.users.findFirst({
 			where: { email },
 			select: { name: true },
@@ -193,6 +193,8 @@ export async function updateCurrentUserDetails(req, res, next) {
 		if (foundUser.name === name) {
 			return res.status(400).json({ msg: 'Details are still the same' });
 		}
+
+		console.log(email);
 
 		await prisma.users.update({
 			where: { email },

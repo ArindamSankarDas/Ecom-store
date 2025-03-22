@@ -4,6 +4,7 @@ import {
 	updateCurrentPassword,
 	updateCurrentUser,
 	logoutUser,
+	refreshTokenUser,
 } from '@api/apiService';
 import { Button } from '@components/ui/button';
 import {
@@ -14,10 +15,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@components/ui/card';
-
 import { Input } from '@components/ui/input';
 import { Label } from '@components/ui/label';
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/tabs';
 import { useAuth } from '@context/AuthContext';
 import { useEffect, useState } from 'react';
@@ -30,44 +29,71 @@ function ProfilePage() {
 	});
 	const [deletePassword, setDeletePassword] = useState('');
 
-	const { accessToken } = useAuth();
-	const { logout } = useAuth();
+	const { accessToken, logout, login } = useAuth();
 
-	useEffect(
-		function () {
-			getCurrentUser(accessToken).then(function name(data) {
+	useEffect(() => {
+		async function fetchUser() {
+			try {
+				const data = await getCurrentUser(accessToken);
 				setUserName(data.name);
-			});
-		},
-		[accessToken]
-	);
+			} catch (error) {
+				if (error.message === '403') {
+					const data = await refreshTokenUser();
+					login(data.accessToken);
+				}
+			}
+		}
+		fetchUser();
+	}, [accessToken]);
 
-	function saveNameChanges() {
-		updateCurrentUser(userName, accessToken);
-	}
+	const handleSaveName = async () => {
+		try {
+			await updateCurrentUser(userName, accessToken);
+		} catch (error) {
+			if (error.message === '403') {
+				const data = await refreshTokenUser();
 
-	function savePasswordChanges() {
-		updateCurrentPassword(passwordChanges, accessToken).then(function () {
-			setPasswordChanges({
-				currentPassword: '',
-				newPassword: '',
-			});
-		});
-	}
+				await updateCurrentUser(userName, accessToken);
+				login(data.accessToken);
+			}
+		}
+	};
 
-	function confirmDeleteAccount() {
-		deleteUser(deletePassword, accessToken)
-			.then(function (data) {
-				
-				console.log(data);
-				setDeletePassword('');
-			})
-			.then(function () {
-				logoutUser().then(function () {
-					logout();
-				});
-			});
-	}
+	const handleSavePassword = async () => {
+		try {
+			await updateCurrentPassword(passwordChanges, accessToken);
+			setPasswordChanges({ currentPassword: '', newPassword: '' });
+		} catch (error) {
+			if (error.message === '403') {
+				const data = await refreshTokenUser();
+
+				await updateCurrentPassword(passwordChanges, accessToken);
+				setPasswordChanges({ currentPassword: '', newPassword: '' });
+				login(data.accessToken);
+			}
+		}
+	};
+
+	const handleDeleteAccount = async () => {
+		try {
+			await deleteUser(deletePassword, accessToken);
+			setDeletePassword('');
+			await logoutUser();
+			logout();
+		} catch (error) {
+			if (error.message === '403') {
+				const data = await refreshTokenUser();
+
+				await deleteUser(deletePassword, data.accessToken);
+				setPasswordChanges({ currentPassword: '', newPassword: '' });
+
+				await logoutUser();
+				logout();
+			} else {
+				console.log(error);
+			}
+		}
+	};
 
 	return (
 		<div className='py-20 w-full flex justify-center items-center'>
@@ -77,12 +103,13 @@ function ProfilePage() {
 					<TabsTrigger value='password'>Password</TabsTrigger>
 					<TabsTrigger value='delete'>Delete</TabsTrigger>
 				</TabsList>
+
 				<TabsContent value='account'>
 					<Card>
 						<CardHeader>
 							<CardTitle>Account</CardTitle>
 							<CardDescription>
-								Make changes to your account here. Click save when you're done.
+								Update your account details here.
 							</CardDescription>
 						</CardHeader>
 						<CardContent className='space-y-2'>
@@ -90,25 +117,22 @@ function ProfilePage() {
 								<Label htmlFor='name'>Name</Label>
 								<Input
 									id='name'
-									defaultValue={userName}
-									onChange={(e) => {
-										setUserName(e.target.value);
-									}}
+									value={userName}
+									onChange={(e) => setUserName(e.target.value)}
 								/>
 							</div>
 						</CardContent>
 						<CardFooter>
-							<Button onClick={saveNameChanges}>Save changes</Button>
+							<Button onClick={handleSaveName}>Save changes</Button>
 						</CardFooter>
 					</Card>
 				</TabsContent>
+
 				<TabsContent value='password'>
 					<Card>
 						<CardHeader>
 							<CardTitle>Password</CardTitle>
-							<CardDescription>
-								Change your password here. After saving, you'll be logged out.
-							</CardDescription>
+							<CardDescription>Change your password here.</CardDescription>
 						</CardHeader>
 						<CardContent className='space-y-2'>
 							<div className='space-y-1'>
@@ -116,14 +140,13 @@ function ProfilePage() {
 								<Input
 									id='current'
 									type='password'
-									onChange={(e) => {
-										setPasswordChanges(function (prevState) {
-											return {
-												...prevState,
-												currentPassword: e.target.value,
-											};
-										});
-									}}
+									value={passwordChanges.currentPassword}
+									onChange={(e) =>
+										setPasswordChanges((prev) => ({
+											...prev,
+											currentPassword: e.target.value,
+										}))
+									}
 								/>
 							</div>
 							<div className='space-y-1'>
@@ -131,45 +154,43 @@ function ProfilePage() {
 								<Input
 									id='new'
 									type='password'
-									onChange={(e) => {
-										setPasswordChanges(function (prevState) {
-											return {
-												...prevState,
-												newPassword: e.target.value,
-											};
-										});
-									}}
+									value={passwordChanges.newPassword}
+									onChange={(e) =>
+										setPasswordChanges((prev) => ({
+											...prev,
+											newPassword: e.target.value,
+										}))
+									}
 								/>
 							</div>
 						</CardContent>
 						<CardFooter>
-							<Button onClick={savePasswordChanges}>Save password</Button>
+							<Button onClick={handleSavePassword}>Save password</Button>
 						</CardFooter>
 					</Card>
 				</TabsContent>
+
 				<TabsContent value='delete'>
 					<Card>
 						<CardHeader>
 							<CardTitle>Delete Account</CardTitle>
 							<CardDescription>
-								Once you delete your account, there is no going back. Please be
-								certain.
+								Confirm deletion by entering your password.
 							</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<div className='space-y-1'>
-								<Label htmlFor='new'>Confirm password</Label>
+								<Label htmlFor='delete'>Confirm password</Label>
 								<Input
-									id='new'
+									id='delete'
 									type='password'
-									onChange={(e) => {
-										setDeletePassword(e.target.value);
-									}}
+									value={deletePassword}
+									onChange={(e) => setDeletePassword(e.target.value)}
 								/>
 							</div>
 						</CardContent>
 						<CardFooter className='flex justify-end'>
-							<Button variant='destructive' onClick={confirmDeleteAccount}>
+							<Button variant='destructive' onClick={handleDeleteAccount}>
 								Delete Account
 							</Button>
 						</CardFooter>
@@ -179,4 +200,5 @@ function ProfilePage() {
 		</div>
 	);
 }
+
 export default ProfilePage;

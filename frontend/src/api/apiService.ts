@@ -99,12 +99,12 @@ export const logoutUser = async function () {
 	}
 };
 
-export const getCurrentUser = async function (accessToken: string | null) {
+export const refreshTokenUser = async function () {
 	try {
-		const response = await fetch(`${BASE_URL}/auth/user`, {
-			method: 'GET',
+		const response = await fetch(`${BASE_URL}/auth/refresh`, {
+			method: 'POST',
 			headers: {
-				Authorization: `Bearer ${accessToken}`,
+				'Content-type': 'application/json',
 			},
 			credentials: 'include',
 		});
@@ -117,27 +117,45 @@ export const getCurrentUser = async function (accessToken: string | null) {
 	}
 };
 
+export const getCurrentUser = async function (accessToken: string | null) {
+	const response = await fetch(`${BASE_URL}/auth/user`, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+		credentials: 'include',
+	});
+
+	if (response.status === 403) {
+		throw new Error(response.status.toString());
+	}
+
+	const result = await response.json();
+
+	return result;
+};
+
 export const updateCurrentUser = async function (
 	name: string,
 	accessToken: string | null
 ) {
-	try {
-		const response = await fetch(`${BASE_URL}/auth/user`, {
-			method: 'PATCH',
-			headers: {
-				'Content-type': 'application/json',
-				Authorization: `Bearer ${accessToken}`,
-			},
-			credentials: 'include',
-			body: JSON.stringify({ name }),
-		});
+	const response = await fetch(`${BASE_URL}/auth/user`, {
+		method: 'PATCH',
+		headers: {
+			'Content-type': 'application/json',
+			Authorization: `Bearer ${accessToken}`,
+		},
+		credentials: 'include',
+		body: JSON.stringify({ name }),
+	});
 
-		const result = await response.json();
-
-		return result;
-	} catch (error) {
-		console.log(error);
+	if (response.status === 403) {
+		throw new Error(response.status.toString());
 	}
+
+	const result = await response.json();
+
+	return result;
 };
 
 export const updateCurrentPassword = async function (
@@ -165,6 +183,7 @@ export const updateCurrentPassword = async function (
 		console.log(error);
 	}
 };
+
 export const deleteUser = async function (
 	password: string,
 	accessToken: string | null
@@ -195,64 +214,58 @@ export const addToCart = async function (
 	itemInfo: CartItem,
 	token: string | null
 ) {
-	try {
-		const response = await fetch(`${BASE_URL}/cart`, {
-			method: 'POST',
-			headers: {
-				'Content-type': 'application/json',
-				Authorization: `Bearer ${token}`,
-			},
-			credentials: 'include',
-			body: JSON.stringify({ ...itemInfo }),
-		});
+	const response = await fetch(`${BASE_URL}/cart`, {
+		method: 'POST',
+		headers: {
+			'Content-type': 'application/json',
+			Authorization: `Bearer ${token}`,
+		},
+		credentials: 'include',
+		body: JSON.stringify({ ...itemInfo }),
+	});
 
-		const result = await response.json();
-
-		return result;
-	} catch (error) {
-		console.log(error);
+	if (response.status === 403) {
+		throw new Error(response.status.toString());
 	}
+
+	const result = await response.json();
+
+	return result;
 };
 
 export const getCartData = async function (accessToken: string | null) {
-	try {
-		const response = await fetch(`${BASE_URL}/cart`, {
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-			credentials: 'include',
-		});
+	const response = await fetch(`${BASE_URL}/cart`, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+		},
+		credentials: 'include',
+	});
 
-		const result = await response.json();
-
-		return result;
-	} catch (error) {
-		console.log(error);
+	if (response.status === 403) {
+		throw new Error(response.status.toString());
 	}
+
+	const result = await response.json();
+
+	return result;
 };
 
 export const deleteCartData = async function (
 	id: string,
 	accessToken: string | null
 ) {
-	try {
-		const response = await fetch(`${BASE_URL}/cart`, {
-			method: 'DELETE',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				'Content-type': 'application/json',
-			},
-			body: JSON.stringify({ cartItemId: id }),
-			credentials: 'include',
-		});
+	const response = await fetch(`${BASE_URL}/cart`, {
+		method: 'DELETE',
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+			'Content-type': 'application/json',
+		},
+		body: JSON.stringify({ cartItemId: id }),
+		credentials: 'include',
+	});
 
-		if (response.ok) {
-			console.log('Item deleted');
-		} else {
-			console.error('Item not deleted');
-		}
-	} catch (error) {
-		console.log(error);
+	if (response.status === 403) {
+		throw new Error(response.status.toString());
 	}
 };

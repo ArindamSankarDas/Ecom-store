@@ -1,6 +1,6 @@
 import { Minus, Plus, Trash2 } from 'lucide-react';
 
-import { addToCart, deleteCartData } from '@api/apiService';
+import { addToCart, deleteCartData, refreshTokenUser } from '@api/apiService';
 
 import { Button } from '@components/ui/button';
 import { useCart } from '@context/CartContext';
@@ -28,7 +28,7 @@ function CartItem({
 	cartItemQty,
 }: Props) {
 	const { removeItem, setCart } = useCart();
-	const { accessToken } = useAuth();
+	const { accessToken, login } = useAuth();
 	const [loading, setLoading] = useState(false);
 
 	const { increaseCount, decreaseCount, itemCount } = useProductCounter(
@@ -63,6 +63,26 @@ function CartItem({
 
 				setCart(data);
 			})
+			.catch(function (error) {
+				if (error.message === '403') {
+					refreshTokenUser().then(function (data) {
+						login(data.accessToken);
+						addToCart(
+							{
+								productId,
+								productCategory: cartItemCategory,
+								productName: cartItemName,
+								productPrice: cartItemPrice,
+								productThumbnail: cartItemThumbnail,
+								productQty: 1,
+							},
+							data.accessToken
+						).then((data) => {
+							setCart(data);
+						});
+					});
+				}
+			})
 			.finally(function () {
 				setLoading(false);
 			});
@@ -94,6 +114,26 @@ function CartItem({
 				}
 
 				setCart(data);
+			})
+			.catch(function (error) {
+				if (error.message === '403') {
+					refreshTokenUser().then(function (data) {
+						login(data.accessToken);
+						addToCart(
+							{
+								productId,
+								productCategory: cartItemCategory,
+								productName: cartItemName,
+								productPrice: cartItemPrice,
+								productThumbnail: cartItemThumbnail,
+								productQty: -1,
+							},
+							data.accessToken
+						).then((data) => {
+							setCart(data);
+						});
+					});
+				}
 			})
 			.finally(function () {
 				setLoading(false);
@@ -147,9 +187,23 @@ function CartItem({
 							variant='ghost'
 							size='icon'
 							onClick={function () {
-								deleteCartData(cartItemId, accessToken).then(function () {
-									removeItem(cartItemId);
-								});
+								deleteCartData(cartItemId, accessToken)
+									.then(function () {
+										removeItem(cartItemId);
+									})
+									.catch(function (error) {
+										if (error.message === '403') {
+											refreshTokenUser().then(function (data) {
+												login(data.accessToken);
+
+												deleteCartData(cartItemId, data.accessToken).then(
+													function () {
+														removeItem(cartItemId);
+													}
+												);
+											});
+										}
+									});
 							}}
 						>
 							<Trash2 className='h-4 w-4' />
