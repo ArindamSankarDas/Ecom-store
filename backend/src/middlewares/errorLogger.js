@@ -1,9 +1,7 @@
 import { resolve, join } from 'path';
-import { appendFile } from 'fs/promises';
 import { randomUUID } from 'crypto';
 
-import { logGenerator } from '../utils/logGenerator';
-import { ensureLogsDirectory, logToFile } from '../utils/logGenerator';
+import { ensureLogsDirectory, logToFile } from '../utils/logGenerator.js';
 
 async function errorLogger(err, req, res, _next) {
 	try {

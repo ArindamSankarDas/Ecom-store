@@ -1,4 +1,4 @@
-import { prisma } from '../config/prismaConfig';
+import { prisma } from '../config/prismaConfig.js';
 
 // retrieve current user details
 export async function getCurrentUserDetails(req, res, next) {

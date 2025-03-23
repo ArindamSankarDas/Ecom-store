@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {
-	deleteUserCart,
+	deleteUserCartItem,
 	getUserCart,
 	setUserCart,
 } from '../controllers/cartController.js';
@@ -12,6 +12,6 @@ router
 	.route('/')
 	.get(verifyJWT, getUserCart)
 	.post(verifyJWT, setUserCart)
-	.delete(verifyJWT, deleteUserCart);
+	.delete(verifyJWT, deleteUserCartItem);
 
 export default router;

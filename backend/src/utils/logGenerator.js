@@ -1,3 +1,6 @@
+import { join } from 'node:path';
+import { mkdir, stat, appendFile } from 'node:fs/promises';
+
 export async function ensureLogsDirectory(logsDir) {
 	try {
 		await stat(logsDir);
