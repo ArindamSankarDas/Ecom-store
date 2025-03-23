@@ -7,9 +7,10 @@ import authRoute from './routes/auth.js';
 import searchRoute from './routes/search.js';
 import categoryRoute from './routes/category.js';
 import cartRoute from './routes/cart.js';
+import profileRoute from './routes/profile.js';
 
 import requestLogger from './middlewares/reqLogger.js';
-import errorLogger from './middlewares/errLogger.js';
+import errorLogger from './middlewares/errorLogger.js';
 
 import corsOptions from './config/corsConfig.js';
 
@@ -36,6 +37,7 @@ app.use(cookieParser());
 
 // application routes
 app.use('/auth', authRoute);
+app.use('/profile', profileRoute);
 app.use('/category', categoryRoute);
 app.use('/search', searchRoute);
 app.use('/cart', cartRoute);

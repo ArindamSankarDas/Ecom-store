@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 
+// to check if the access token sent with the request is valid or not
 function verifyJWT(req, res, next) {
 	const authorization = req.headers['authorization'];
 

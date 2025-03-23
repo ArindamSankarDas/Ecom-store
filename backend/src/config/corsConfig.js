@@ -1,8 +1,10 @@
+// allowed web origins which can send cors request
 export const allowedOrigins = [
-	'https://ecomstore.devsankar.online',
+	'https://ecomstore.arindamsankardas.dev',
 	'http://localhost:5173',
 ];
 
+// cors options for the server.js
 const corsOptions = {
 	origin: function (origin, callback) {
 		if (!origin || allowedOrigins.includes(origin)) {

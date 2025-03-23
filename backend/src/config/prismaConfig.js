@@ -1,7 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 
+// Initialize a new instance of PrismaClient to interact with the database
 export const prisma = new PrismaClient();
 
+// Function call to initialize the database connection
 export async function connectDB() {
 	try {
 		await prisma.$connect();

@@ -1,12 +1,16 @@
 import jwt from 'jsonwebtoken';
 import { prisma } from '../config/prismaConfig.js';
 
+// to register the user
 export async function registerUser(req, res, next) {
 	try {
-		const { name, email, password } = req.body;
+		const { name, email, password, confirmPassword } = req.body;
 
-		if (!name || !email || !password) {
-			return res.status(400).json({ msg: 'Details not given ' });
+		if (!(name && email && password && confirmPassword)) {
+			return res.status(400).json({
+				message:
+					'One of the above details, i.e, name, email, password, confirmPassword',
+			});
 		}
 
 		const foundUser = await prisma.users.findFirst({
@@ -14,7 +18,11 @@ export async function registerUser(req, res, next) {
 		});
 
 		if (foundUser) {
-			return res.status(409).json({ msg: 'Email or User already Taken' });
+			return res.status(409).json({ msg: 'Email or Username already Taken' });
+		}
+
+		if (password !== confirmPassword) {
+			return res.status(400).json({ message: "Both passwords don't match" });
 		}
 
 		await prisma.users.create({
@@ -25,23 +33,24 @@ export async function registerUser(req, res, next) {
 			},
 		});
 
+		// redirecting the email and password to the next middleware
 		req.body = { email, password };
 
 		next();
 	} catch (error) {
-		console.log(error);
-		res
-			.status(500)
-			.json({ msg: 'Internal Server Error', error: error.message });
+		next(error);
 	}
 }
 
-export async function loginUser(req, res) {
+// to log the user in
+export async function loginUser(req, res, next) {
 	try {
 		const { email, password } = req.body;
 
 		if (!email || !password) {
-			return res.status(400).json({ msg: 'Details not filled up' });
+			return res.status(400).json({
+				message: 'One of the above details, i.e, name and password',
+			});
 		}
 
 		const foundUser = await prisma.users.findUnique({
@@ -49,11 +58,11 @@ export async function loginUser(req, res) {
 		});
 
 		if (!foundUser) {
-			return res.status(404).json({ msg: 'User not found' });
+			return res.status(404).json({ message: 'User not found' });
 		}
 
 		if (foundUser.password !== password) {
-			return res.status(401).json({ msg: 'Invalid Password' });
+			return res.status(401).json({ message: 'Invalid Password' });
 		}
 
 		const accessToken = jwt.sign(
@@ -86,10 +95,11 @@ export async function loginUser(req, res) {
 
 		res.status(200).json({ accessToken });
 	} catch (error) {
-		console.log(error);
+		next(error);
 	}
 }
 
+// to fetch new access token on expiry
 export function refreshTokenUser(req, res) {
 	const cookies = req.cookies;
 
@@ -101,7 +111,11 @@ export function refreshTokenUser(req, res) {
 		refreshToken,
 		process.env.REFRESH_TOKEN_SECRET,
 		function (err, decoded) {
-			if (err) return res.sendStatus(401);
+			if (err)
+				return res.status(401).json({
+					message:
+						'Has been logged out as credentials have expired. Please Log in again.',
+				});
 
 			const accessToken = jwt.sign(
 				{ email: decoded.email },
@@ -114,12 +128,13 @@ export function refreshTokenUser(req, res) {
 	);
 }
 
+// to log the user out
 export async function logoutUser(req, res) {
 	try {
 		const cookies = req.cookies;
 
 		if (!cookies?.jwt) {
-			return res.status(204).json({ msg: 'No Content' });
+			return res.status(204).json({ message: 'No existing cookie found' });
 		}
 
 		const refreshToken = cookies.jwt;
@@ -129,13 +144,16 @@ export async function logoutUser(req, res) {
 		});
 
 		if (!foundUser) {
+			// clear the cookie by chance it was a prexisting one
 			res.clearCookie('jwt', {
 				httpOnly: true,
 				sameSite: 'None',
 				secure: true,
 			});
 
-			return res.sendStatus(204);
+			return res
+				.sendStatus(204)
+				.json({ message: 'Removed pre-existing Auth cookie' });
 		}
 
 		await prisma.users.update({
@@ -149,126 +167,7 @@ export async function logoutUser(req, res) {
 			secure: true,
 		});
 
-		res.sendStatus(204);
-	} catch (error) {
-		console.error('Logout Error:', error);
-		res.status(500).json({ msg: 'Internal Server Error' });
-	}
-}
-
-export async function currentUser(req, res, next) {
-	try {
-		const email = req.email;
-
-		const foundUser = await prisma.users.findFirst({
-			where: { email },
-			select: {
-				name: true,
-			},
-		});
-
-		res.status(200).json(foundUser);
-	} catch (error) {
-		next(error);
-	}
-}
-
-export async function updateCurrentUserDetails(req, res, next) {
-	try {
-		const { name } = req.body;
-
-		if (!name) {
-			return res.status(400).json({ msg: 'Details not given' });
-		}
-
-		const email = req.email;
-
-		console.log(email);
-
-		const foundUser = await prisma.users.findFirst({
-			where: { email },
-			select: { name: true },
-		});
-
-		if (foundUser.name === name) {
-			return res.status(400).json({ msg: 'Details are still the same' });
-		}
-
-		console.log(email);
-
-		await prisma.users.update({
-			where: { email },
-			data: {
-				name,
-			},
-		});
-
-		res.status(200).json({ msg: 'User Name updated' });
-	} catch (error) {
-		next(error);
-	}
-}
-
-export async function updateCurrentPasswordDetails(req, res, next) {
-	try {
-		const { password, currentPassword } = req.body;
-
-		if (!(password && currentPassword)) {
-			return res.status(400).json({ msg: 'Details not given' });
-		}
-
-		const email = req.email;
-
-		const foundUser = await prisma.users.findFirst({
-			where: { email },
-			select: { password: true },
-		});
-
-		if (foundUser.password !== currentPassword) {
-			return res.status(400).json({ msg: 'Current password did not match' });
-		}
-
-		await prisma.users.update({
-			where: { email },
-			data: {
-				password,
-			},
-		});
-
-		res.status(200).json({ msg: 'Password updated' });
-	} catch (error) {
-		next(error);
-	}
-}
-
-export async function deleteCurrentUser(req, res, next) {
-	try {
-		const { password } = req.body;
-
-		if (!password) {
-			return res.status(400).json({ msg: 'Password is required' });
-		}
-
-		const email = req.email;
-
-		const foundUser = await prisma.users.findFirst({
-			where: { email },
-			select: { password: true, id: true },
-		});
-
-		if (!foundUser) {
-			return res.status(404).json({ msg: 'User not found' });
-		}
-
-		if (foundUser.password !== password) {
-			return res.status(400).json({ msg: 'Current password did not match' });
-		}
-
-		await prisma.users.delete({
-			where: { id: foundUser.id },
-		});
-
-		return res.status(200).json({ msg: 'User deleted successfully' });
+		res.status(204).json({ message: 'User is logged out' });
 	} catch (error) {
 		next(error);
 	}

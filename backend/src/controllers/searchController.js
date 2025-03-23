@@ -1,5 +1,6 @@
 import { prisma } from '../config/prismaConfig.js';
 
+// retrieves the searched items from the search bar
 export async function searchProduct(req, _res, next) {
 	const { q } = req.query;
 

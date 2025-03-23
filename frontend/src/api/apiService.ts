@@ -118,7 +118,7 @@ export const refreshTokenUser = async function () {
 };
 
 export const getCurrentUser = async function (accessToken: string | null) {
-	const response = await fetch(`${BASE_URL}/auth/user`, {
+	const response = await fetch(`${BASE_URL}/profile/user`, {
 		method: 'GET',
 		headers: {
 			Authorization: `Bearer ${accessToken}`,
@@ -139,7 +139,7 @@ export const updateCurrentUser = async function (
 	name: string,
 	accessToken: string | null
 ) {
-	const response = await fetch(`${BASE_URL}/auth/user`, {
+	const response = await fetch(`${BASE_URL}/profile/user`, {
 		method: 'PATCH',
 		headers: {
 			'Content-type': 'application/json',
@@ -163,7 +163,7 @@ export const updateCurrentPassword = async function (
 	accessToken: string | null
 ) {
 	try {
-		const response = await fetch(`${BASE_URL}/auth/password`, {
+		const response = await fetch(`${BASE_URL}/profile/password`, {
 			method: 'PATCH',
 			headers: {
 				'Content-type': 'application/json',
@@ -189,7 +189,7 @@ export const deleteUser = async function (
 	accessToken: string | null
 ) {
 	try {
-		const response = await fetch(`${BASE_URL}/auth/user`, {
+		const response = await fetch(`${BASE_URL}/profile/user`, {
 			method: 'DELETE',
 			headers: {
 				'Content-type': 'application/json',
