@@ -100,23 +100,24 @@ export const logoutUser = async function () {
 };
 
 export const refreshTokenUser = async function () {
-	try {
-		const response = await fetch(`${BASE_URL}/auth/refresh`, {
-			method: 'POST',
-			headers: {
-				'Content-type': 'application/json',
-			},
-			credentials: 'include',
-		});
+	const response = await fetch(`${BASE_URL}/auth/refresh`, {
+		method: 'POST',
+		headers: {
+			'Content-type': 'application/json',
+		},
+		credentials: 'include',
+	});
 
-		const result = await response.json();
-
-		return result;
-	} catch (error) {
-		console.log(error);
+	if (response.status === 401) {
+		throw new Error(response.status.toString());
 	}
+
+	const result = await response.json();
+
+	return result;
 };
 
+//Profile
 export const getCurrentUser = async function (accessToken: string | null) {
 	const response = await fetch(`${BASE_URL}/profile/user`, {
 		method: 'GET',

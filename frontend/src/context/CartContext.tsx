@@ -6,7 +6,7 @@ import {
 	useEffect,
 } from 'react';
 import { useAuth } from '@context/AuthContext';
-import { getCartData, refreshTokenUser } from '@api/apiService';
+import { getCartData, logoutUser, refreshTokenUser } from '@api/apiService';
 import { CartItem } from '@lib/types';
 
 type CartContextItem = CartItem & {
@@ -26,24 +26,33 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: Props) {
-	const { accessToken, login } = useAuth();
+	const { accessToken, login, logout } = useAuth();
 	const [cartItems, setCartItems] = useState<CartContextItem[] | undefined>(
 		undefined
 	);
 
 	useEffect(() => {
 		if (accessToken) {
-			getCartData(accessToken)
-				.then((data) => {
-					setCartItems([...data.cart]);
-				})
-				.catch(function (error) {
-					if (error.message === '403') {
-						refreshTokenUser().then(function (data) {
-							login(data.accessToken);
-						});
+			(async function () {
+				try {
+					const currentUserCartData = await getCartData(accessToken);
+
+					setCartItems([...currentUserCartData.cart]);
+				} catch (error) {
+					if ((error as Error).message === '403') {
+						const newAccessToken = await refreshTokenUser().catch(
+							async function (error) {
+								if (error.message === '401') {
+									await logoutUser();
+									logout();
+								}
+							}
+						);
+
+						login(newAccessToken.accessToken);
 					}
-				});
+				}
+			})();
 		}
 	}, [accessToken]);
 

@@ -62,7 +62,6 @@ function App() {
 							{/* Routes to the profile when clicked on, i.e. ProfilePage(/profile) */}
 							<Route path='/profile' element={<ProfilePage />} />
 							{/* Routes to the cart when clicked on, i.e. CartPage(/cart) */}
-
 							<Route path='/cart' element={<CartPage />} />
 						</Route>
 					</Route>

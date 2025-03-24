@@ -1,6 +1,11 @@
 import { Minus, Plus, Trash2 } from 'lucide-react';
 
-import { addToCart, deleteCartData, refreshTokenUser } from '@api/apiService';
+import {
+	addToCart,
+	deleteCartData,
+	logoutUser,
+	refreshTokenUser,
+} from '@api/apiService';
 
 import { Button } from '@components/ui/button';
 import { useCart } from '@context/CartContext';
@@ -28,7 +33,7 @@ function CartItem({
 	cartItemQty,
 }: Props) {
 	const { removeItem, setCart } = useCart();
-	const { accessToken, login } = useAuth();
+	const { accessToken, login, logout } = useAuth();
 	const [loading, setLoading] = useState(false);
 
 	const { increaseCount, decreaseCount, itemCount } = useProductCounter(
@@ -36,108 +41,95 @@ function CartItem({
 		cartItemQty
 	);
 
-	function add() {
+	async function manageItemCounterRequest(count: 1 | -1) {
 		setLoading(true);
 
-		addToCart(
-			{
-				productId,
-				productCategory: cartItemCategory,
-				productName: cartItemName,
-				productPrice: cartItemPrice,
-				productThumbnail: cartItemThumbnail,
-				productQty: 1,
-			},
-			accessToken
-		)
-			.then(function (data) {
-				increaseCount();
+		try {
+			const cartItem = await addToCart(
+				{
+					productId,
+					productCategory: cartItemCategory,
+					productName: cartItemName,
+					productPrice: cartItemPrice,
+					productThumbnail: cartItemThumbnail,
+					productQty: count,
+				},
+				accessToken
+			);
 
-				return data;
-			})
-			.then(function (data) {
-				if (data.msg) {
-					alert(data.msg);
-					return;
-				}
+			switch (count) {
+				case 1:
+					increaseCount();
+					break;
 
-				setCart(data);
-			})
-			.catch(function (error) {
-				if (error.message === '403') {
-					refreshTokenUser().then(function (data) {
-						login(data.accessToken);
-						addToCart(
-							{
-								productId,
-								productCategory: cartItemCategory,
-								productName: cartItemName,
-								productPrice: cartItemPrice,
-								productThumbnail: cartItemThumbnail,
-								productQty: 1,
-							},
-							data.accessToken
-						).then((data) => {
-							setCart(data);
-						});
-					});
-				}
-			})
-			.finally(function () {
-				setLoading(false);
-			});
+				case -1:
+					decreaseCount();
+					break;
+
+				default:
+					console.log('Not an option');
+					break;
+			}
+
+			if (cartItem.message) {
+				alert(cartItem.message);
+			}
+
+			setCart(cartItem);
+		} catch (error) {
+			if ((error as Error).message === '403') {
+				const newAccessToken = await refreshTokenUser().catch(async function (
+					error
+				) {
+					if (error.message === '401') {
+						await logoutUser();
+						logout();
+					}
+				});
+
+				login(newAccessToken.accessToken);
+
+				const cartItem = await addToCart(
+					{
+						productId,
+						productCategory: cartItemCategory,
+						productName: cartItemName,
+						productPrice: cartItemPrice,
+						productThumbnail: cartItemThumbnail,
+						productQty: count,
+					},
+					accessToken
+				);
+
+				setCart(cartItem);
+			}
+		} finally {
+			setLoading(false);
+		}
 	}
 
-	function sub() {
-		setLoading(true);
+	async function deleteCartItem() {
+		try {
+			await deleteCartData(cartItemId, accessToken);
 
-		addToCart(
-			{
-				productId,
-				productCategory: cartItemCategory,
-				productName: cartItemName,
-				productPrice: cartItemPrice,
-				productThumbnail: cartItemThumbnail,
-				productQty: -1,
-			},
-			accessToken
-		)
-			.then(function (data) {
-				decreaseCount();
+			removeItem(cartItemId);
+		} catch (error) {
+			if ((error as Error).message === '403') {
+				const newAccessToken = await refreshTokenUser().catch(async function (
+					error
+				) {
+					if (error.message === '401') {
+						await logoutUser();
+						logout();
+					}
+				});
 
-				return data;
-			})
-			.then(function (data) {
-				if (data.msg) {
-					alert(data.msg);
-					return;
-				}
+				login(newAccessToken.accessToken);
 
-				setCart(data);
-			})
-			.catch(function (error) {
-				if (error.message === '403') {
-					refreshTokenUser().then(function (data) {
-						login(data.accessToken);
-						addToCart(
-							{
-								productId,
-								productCategory: cartItemCategory,
-								productName: cartItemName,
-								productPrice: cartItemPrice,
-								productThumbnail: cartItemThumbnail,
-								productQty: -1,
-							},
-							data.accessToken
-						).then((data) => {
-							setCart(data);
-						});
-					});
-				}
-			})
-			.finally(function () {
-				setLoading(false);
-			});
+				await deleteCartData(cartItemId, newAccessToken.accessToken);
+				removeItem(cartItemId);
+			}
+		}
 	}
 
 	return (
@@ -163,10 +155,10 @@ function CartItem({
 						<div className='w-fit flex justify-center items-center gap-4 border rounded-lg'>
 							<button
 								className='border-r py-1 px-2 rounded-tl-lg rounded-bl-lg hover:bg-slate-50 active:bg-white'
-								onClick={sub}
+								onClick={() => manageItemCounterRequest(-1)}
 								disabled={loading || itemCount.currentCount - 1 < 1}
 							>
-								<Minus size={18} onClick={decreaseCount} />
+								<Minus size={18} />
 							</button>
 
 							<span className='font-semibold select-none'>
@@ -175,7 +167,7 @@ function CartItem({
 
 							<button
 								className='border-l py-1 px-2 rounded-tr-lg rounded-br-lg hover:bg-slate-50 active:bg-white'
-								onClick={add}
+								onClick={() => manageItemCounterRequest(1)}
 								disabled={
 									loading || itemCount.currentCount === itemCount.totalCount
 								}
@@ -183,29 +175,7 @@ function CartItem({
 								<Plus size={18} />
 							</button>
 						</div>
-						<Button
-							variant='ghost'
-							size='icon'
-							onClick={function () {
-								deleteCartData(cartItemId, accessToken)
-									.then(function () {
-										removeItem(cartItemId);
-									})
-									.catch(function (error) {
-										if (error.message === '403') {
-											refreshTokenUser().then(function (data) {
-												login(data.accessToken);
-
-												deleteCartData(cartItemId, data.accessToken).then(
-													function () {
-														removeItem(cartItemId);
-													}
-												);
-											});
-										}
-									});
-							}}
-						>
+						<Button variant='ghost' size='icon' onClick={deleteCartItem}>
 							<Trash2 className='h-4 w-4' />
 						</Button>
 					</div>

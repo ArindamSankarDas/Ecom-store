@@ -34,12 +34,12 @@ function ProfilePage() {
 	useEffect(() => {
 		async function fetchUser() {
 			try {
-				const data = await getCurrentUser(accessToken);
-				setUserName(data.name);
+				const currentUser = await getCurrentUser(accessToken);
+				setUserName(currentUser.name);
 			} catch (error) {
-				if (error.message === '403') {
-					const data = await refreshTokenUser();
-					login(data.accessToken);
+				if ((error as Error).message === '403') {
+					const newAccessToken = await refreshTokenUser();
+					login(newAccessToken.accessToken);
 				}
 			}
 		}
@@ -50,11 +50,18 @@ function ProfilePage() {
 		try {
 			await updateCurrentUser(userName, accessToken);
 		} catch (error) {
-			if (error.message === '403') {
-				const data = await refreshTokenUser();
+			if ((error as Error).message === '403') {
+				const newAccessToken = await refreshTokenUser().catch(async function (
+					error
+				) {
+					if (error.message === '401') {
+						await logoutUser();
+						logout();
+					}
+				});
 
-				await updateCurrentUser(userName, accessToken);
-				login(data.accessToken);
+				await updateCurrentUser(userName, newAccessToken.accessToken);
+				login(newAccessToken.accessToken);
 			}
 		}
 	};
@@ -64,12 +71,23 @@ function ProfilePage() {
 			await updateCurrentPassword(passwordChanges, accessToken);
 			setPasswordChanges({ currentPassword: '', newPassword: '' });
 		} catch (error) {
-			if (error.message === '403') {
-				const data = await refreshTokenUser();
+			if ((error as Error).message === '403') {
+				const newAccessToken = await refreshTokenUser().catch(async function (
+					error
+				) {
+					if (error.message === '401') {
+						await logoutUser();
+						logout();
+					}
+				});
 
-				await updateCurrentPassword(passwordChanges, accessToken);
+				await updateCurrentPassword(
+					passwordChanges,
+					newAccessToken.accessToken
+				);
+
 				setPasswordChanges({ currentPassword: '', newPassword: '' });
-				login(data.accessToken);
+				login(newAccessToken.accessToken);
 			}
 		}
 	};
@@ -81,16 +99,21 @@ function ProfilePage() {
 			await logoutUser();
 			logout();
 		} catch (error) {
-			if (error.message === '403') {
-				const data = await refreshTokenUser();
+			if ((error as Error).message === '403') {
+				const newAccessToken = await refreshTokenUser().catch(async function (
+					error
+				) {
+					if (error.message === '401') {
+						await logoutUser();
+						logout();
+					}
+				});
 
-				await deleteUser(deletePassword, data.accessToken);
+				await deleteUser(deletePassword, newAccessToken.accessToken);
 				setPasswordChanges({ currentPassword: '', newPassword: '' });
 
 				await logoutUser();
 				logout();
-			} else {
-				console.log(error);
 			}
 		}
 	};

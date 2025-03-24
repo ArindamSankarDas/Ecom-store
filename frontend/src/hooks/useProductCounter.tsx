@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useFetchProductItem } from '@hooks/useProducts';
-import { addToCart, refreshTokenUser } from '@api/apiService';
+import { addToCart, logoutUser, refreshTokenUser } from '@api/apiService';
 import { useCart } from '@context/CartContext';
 import { useAuth } from '@context/AuthContext';
 
 function useProductCounter(productId?: number, cartItemQty?: number) {
-	const { accessToken, isAuthenticated, login } = useAuth();
+	const { accessToken, isAuthenticated, login, logout } = useAuth();
 	const { setCart } = useCart();
 
 	const { productDetails, reviews } = useFetchProductItem(productId);
@@ -49,59 +49,78 @@ function useProductCounter(productId?: number, cartItemQty?: number) {
 		});
 	}
 
-	function submitToCart() {
-		if (!isAuthenticated) {
-			alert('Please login first');
-			return;
-		}
+	async function submitToCart() {
+		try {
+			if (!isAuthenticated) {
+				alert('Please login first');
+				return;
+			}
 
-		if (
-			!(
-				productDetails?.title &&
-				productDetails?.price &&
-				productDetails?.thumbnail &&
-				productDetails?.thumbnail &&
-				productDetails?.category
-			)
-		) {
-			alert('Property on product not present');
-			return;
-		}
+			if (
+				!(
+					productDetails?.title &&
+					productDetails?.price &&
+					productDetails?.thumbnail &&
+					productDetails?.thumbnail &&
+					productDetails?.category
+				)
+			) {
+				alert('Property on product not present');
+				return;
+			}
 
-		addToCart(
-			{
-				productId,
-				productCategory: productDetails.category,
-				productThumbnail: productDetails.thumbnail,
-				productName: productDetails.title,
-				productPrice: productDetails.price,
-				productQty: itemCount.currentCount,
-			},
-			accessToken
-		)
-			.then((data) => {
-				setCart(data);
-			})
-			.catch(function (error) {
-				if (error.message === '403') {
-					refreshTokenUser().then(function (data) {
-						login(data.accessToken);
-						addToCart(
-							{
-								productId,
-								productCategory: productDetails.category,
-								productThumbnail: productDetails.thumbnail,
-								productName: productDetails.title,
-								productPrice: productDetails.price,
-								productQty: itemCount.currentCount,
-							},
-							accessToken
-						).then((data) => {
-							setCart(data);
-						});
-					});
+			const cartItemData = await addToCart(
+				{
+					productId,
+					productCategory: productDetails.category,
+					productThumbnail: productDetails.thumbnail,
+					productName: productDetails.title,
+					productPrice: productDetails.price,
+					productQty: itemCount.currentCount,
+				},
+				accessToken
+			);
+
+			setCart(cartItemData);
+		} catch (error) {
+			if ((error as Error).message === '403') {
+				const newAccessToken = await refreshTokenUser().catch(async function (
+					error
+				) {
+					if (error.message === '401') {
+						await logoutUser();
+						logout();
+					}
+				});
+
+				login(newAccessToken.accessToken);
+
+				if (
+					!(
+						productDetails?.title &&
+						productDetails?.price &&
+						productDetails?.thumbnail &&
+						productDetails?.thumbnail &&
+						productDetails?.category
+					)
+				) {
+					alert('Property on product not present');
+					return;
 				}
-			});
+				const cartItemData = await addToCart(
+					{
+						productId,
+						productCategory: productDetails.category,
+						productThumbnail: productDetails.thumbnail,
+						productName: productDetails.title,
+						productPrice: productDetails.price,
+						productQty: itemCount.currentCount,
+					},
+					accessToken
+				);
+				setCart(cartItemData);
+			}
+		}
 	}
 
 	return {
