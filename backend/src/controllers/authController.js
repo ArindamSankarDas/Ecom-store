@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { prisma } from '../config/prismaConfig.js';
+import { createHashPWD, compareHashedPWD } from '../utils/passwordHash.js';
 
 // to register the user
 export async function registerUser(req, res, next) {
@@ -25,11 +26,13 @@ export async function registerUser(req, res, next) {
 			return res.status(400).json({ message: "Both passwords don't match" });
 		}
 
+		const hashedPassword = await createHashPWD(password);
+
 		await prisma.users.create({
 			data: {
 				name,
 				email,
-				password,
+				password: hashedPassword,
 			},
 		});
 
@@ -61,7 +64,7 @@ export async function loginUser(req, res, next) {
 			return res.status(404).json({ message: 'User not found' });
 		}
 
-		if (foundUser.password !== password) {
+		if (!compareHashedPWD(foundUser.password, password)) {
 			return res.status(401).json({ message: 'Invalid Password' });
 		}
 

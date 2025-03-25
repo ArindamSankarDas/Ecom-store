@@ -1,4 +1,5 @@
 import { prisma } from '../config/prismaConfig.js';
+import { compareHashedPWD } from '../utils/passwordHash.js';
 
 // retrieve current user details
 export async function getCurrentUserDetails(req, res, next) {
@@ -87,16 +88,18 @@ export async function updateCurrentPasswordDetails(req, res, next) {
 				.json({ message: "Couldn't find the user to update the password of" });
 		}
 
-		if (foundUser.password !== currentPassword) {
+		if (!compareHashedPWD(foundUser.password, currentPassword)) {
 			return res
 				.status(400)
 				.json({ message: 'Current password did not match' });
 		}
 
+		const hashedPassword = await createHashPWD(password);
+
 		await prisma.users.update({
 			where: { email },
 			data: {
-				password,
+				password: hashedPassword,
 			},
 		});
 
@@ -128,7 +131,7 @@ export async function deleteCurrentUser(req, res, next) {
 				.json({ message: "Couldn't find the user to delete" });
 		}
 
-		if (foundUser.password !== password) {
+		if (!compareHashedPWD(foundUser.password, password)) {
 			return res
 				.status(400)
 				.json({ message: 'Current password did not match' });
