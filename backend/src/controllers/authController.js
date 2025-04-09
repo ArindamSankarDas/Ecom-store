@@ -132,7 +132,7 @@ export function refreshTokenUser(req, res) {
 }
 
 // to log the user out
-export async function logoutUser(req, res) {
+export async function logoutUser(req, res, next) {
 	try {
 		const cookies = req.cookies;
 

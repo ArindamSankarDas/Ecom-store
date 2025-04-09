@@ -54,3 +54,21 @@ model CartItems {
   productCategory  String
   productThumbnail String
 }
+
+model Payments {
+  id            String   @id
+  amount        Float
+  currency      String   @db.VarChar(3)
+  profileId     String
+  paymentStatus String
+  Orders        Orders[]
+}
+
+model Orders {
+  id              Int      @id
+  paymentsId      String
+  productName     String
+  productQuantity Int
+  productPrice    Float
+  Payments        Payments @relation(fields: [paymentsId], references: [id], onDelete: Cascade)
+}

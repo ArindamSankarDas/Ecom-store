@@ -1,31 +1,31 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "main": "src/server.js",
-  "type": "module",
-  "scripts": {
-    "dev": "node -r dotenv/config --watch-path=./src --watch-preserve-output .",
-    "start": "node ."
-  },
-  "keywords": [
-    "node",
-    "pern",
-    "backend"
-  ],
-  "author": "Arindam Sankar Das",
-  "license": "ISC",
-  "description": "Backend implementation of the e-commerce application",
-  "dependencies": {
-    "@mollie/api-client": "^4.2.0",
-    "@prisma/client": "^6.3.1",
-    "bcrypt": "^5.1.1",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2"
-  },
-  "devDependencies": {
-    "dotenv": "^16.4.7",
-    "prisma": "^6.3.1"
-  }
+	"name": "backend",
+	"version": "1.0.0",
+	"main": "src/server.js",
+	"type": "module",
+	"scripts": {
+		"dev": "node -r dotenv/config --watch --watch-preserve-output .",
+		"start": "node ."
+	},
+	"keywords": [
+		"node",
+		"PERN",
+		"backend"
+	],
+	"author": "Arindam Sankar Das",
+	"license": "ISC",
+	"description": "Backend implementation of the e-commerce application",
+	"dependencies": {
+		"@mollie/api-client": "^4.2.0",
+		"@prisma/client": "^6.3.1",
+		"bcrypt": "^5.1.1",
+		"cookie-parser": "^1.4.7",
+		"cors": "^2.8.5",
+		"express": "^4.21.2",
+		"jsonwebtoken": "^9.0.2"
+	},
+	"devDependencies": {
+		"dotenv": "^16.4.7",
+		"prisma": "^6.3.1"
+	}
 }

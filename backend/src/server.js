@@ -8,6 +8,7 @@ import searchRoute from './routes/search.js';
 import categoryRoute from './routes/category.js';
 import cartRoute from './routes/cart.js';
 import profileRoute from './routes/profile.js';
+import paymentRoute from './routes/payment.js';
 
 import requestLogger from './middlewares/requestLogger.js';
 import errorLogger from './middlewares/errorLogger.js';
@@ -31,6 +32,7 @@ app.use(cors(corsOptions));
 
 // parses any incoming json request body
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // cookie parsing
 app.use(cookieParser());
@@ -41,6 +43,7 @@ app.use('/profile', profileRoute);
 app.use('/category', categoryRoute);
 app.use('/search', searchRoute);
 app.use('/cart', cartRoute);
+app.use('/payments', paymentRoute);
 app.use('/', rootRoute);
 
 // handles 404 routes
