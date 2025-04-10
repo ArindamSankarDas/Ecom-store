@@ -9,7 +9,7 @@ import { useAuth } from '@context/AuthContext';
 import { getCartData, logoutUser, refreshTokenUser } from '@api/apiService';
 import { CartItem } from '@lib/types';
 
-type CartContextItem = CartItem & {
+export type CartContextItem = CartItem & {
 	id: string;
 };
 

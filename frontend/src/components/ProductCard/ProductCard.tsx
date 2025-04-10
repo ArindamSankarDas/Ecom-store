@@ -45,7 +45,7 @@ function ProductCard({
 				</div>
 
 				<p className='self-end font-bold text-lg'>
-					$<data value={itemPrice}>{itemPrice}</data>
+					€<data value={itemPrice}>{itemPrice}</data>
 				</p>
 			</div>
 

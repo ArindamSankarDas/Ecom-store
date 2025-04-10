@@ -19,7 +19,7 @@ export async function molliePaymentService(
 			description: `Order: ${description}`,
 			redirectUrl,
 			webhookUrl:
-				'https://2cbd-2405-201-a805-c1ad-80cb-dbe5-7e39-d6be.ngrok-free.app/payments/webhook',
+				'https://f4cb-2405-201-a805-c1ad-58d6-15da-9fc2-3027.ngrok-free.app/payments/webhook',
 			metadata: {
 				order_id: description,
 				order_items: items,

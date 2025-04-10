@@ -65,7 +65,8 @@ model Payments {
 }
 
 model Orders {
-  id              Int      @id
+  id              String   @id @default(uuid())
+  orderId         String
   paymentsId      String
   productName     String
   productQuantity Int

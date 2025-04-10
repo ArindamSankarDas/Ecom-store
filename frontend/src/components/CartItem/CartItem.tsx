@@ -150,7 +150,7 @@ function CartItem({
 					{cartItemCategory}
 				</p>
 				<div className='self-end flex justify-between items-center mt-2'>
-					<span className='font-bold'>${cartItemPrice}</span>
+					<span className='font-bold'>€{cartItemPrice}</span>
 					<div className='flex justify-center items-center gap-2'>
 						<div className='w-fit flex justify-center items-center gap-4 border rounded-lg'>
 							<button

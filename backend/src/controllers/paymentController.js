@@ -30,26 +30,6 @@ export async function createNewPayment(req, res, next) {
 	}
 }
 
-export async function paymentStatus(req, res, next) {
-	try {
-		const { orderId } = req.params;
-
-		if (!orderId) {
-			return res.sendStatus(400);
-		}
-
-		const paymentStatus = await prisma.orders.findFirst({
-			where: { id: parseInt(orderId) },
-		});
-
-		console.log(paymentStatus);
-
-		res.status(200).json({ status: paymentStatus });
-	} catch (error) {
-		next(error);
-	}
-}
-
 export async function paymentWebhook(req, res, next) {
 	try {
 		const { id } = req.body;
@@ -58,27 +38,26 @@ export async function paymentWebhook(req, res, next) {
 			return res.status(400).json({ message: 'Payment ID is required' });
 		}
 
-		const molliePaymentInfo = await molliePaymentStatus(id);
+		const payment = await molliePaymentStatus(id);
 
-		if (molliePaymentInfo.status !== 'paid')
-			res.status(500).json({ message: "Payment couldn't be processed" });
+		if (payment.status !== 'paid') {
+			return res.status(500).json({ message: "Payment couldn't be processed" });
+		}
 
-		const payment = await prisma.payments.create({
+		await prisma.payments.create({
 			data: {
-				id: molliePaymentInfo.id,
-				amount: parseFloat(molliePaymentInfo.amount.value),
-				currency: molliePaymentInfo.amount.currency,
-				profileId: molliePaymentInfo.profileId,
-				paymentStatus: molliePaymentInfo.status,
+				id: payment.id,
+				amount: parseFloat(payment.amount.value),
+				currency: payment.amount.currency,
+				profileId: payment.profileId,
+				paymentStatus: payment.status,
 			},
 		});
 
-		const updatedItems = molliePaymentInfo.metadata.order_items.map(function (
-			orderItem
-		) {
+		const updatedItems = payment.metadata.order_items.map(function (orderItem) {
 			return {
-				id: molliePaymentInfo.metadata.order_id,
-				paymentsId: molliePaymentInfo.id,
+				orderId: payment.metadata.order_id.toString(),
+				paymentsId: payment.id,
 				productName: orderItem.productName,
 				productQuantity: orderItem.productQty,
 				productPrice: orderItem.productPrice,
@@ -86,10 +65,10 @@ export async function paymentWebhook(req, res, next) {
 		});
 
 		await prisma.orders.createMany({
-			data: [...updatedItems],
+			data: updatedItems,
 		});
 
-		res.status(200).json({ message: 'Order Placed', paymentId: payment.id });
+		res.sendStatus(200);
 	} catch (error) {
 		next(error);
 	}

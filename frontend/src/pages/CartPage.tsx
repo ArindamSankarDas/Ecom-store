@@ -3,9 +3,12 @@ import CartItem from '@components/CartItem/CartItem';
 import { Card, CardContent } from '@components/ui/card';
 
 import { useCart } from '@context/CartContext';
+import { makePayment } from '@api/apiService';
+import { useAuth } from '@context/AuthContext';
 
 function CartPage() {
 	const { cartItems } = useCart();
+	const { accessToken } = useAuth();
 
 	return (
 		<main className='flex-1 px-4 py-10 lg:px-20 lg:pb-32'>
@@ -45,14 +48,28 @@ function CartPage() {
 								<div className='flex justify-between'>
 									<span className='font-bold'>Total</span>
 									<span>
-										$
+										€
 										{cartItems?.reduce(function (total, elem) {
 											return total + elem.productPrice * elem.productQty;
 										}, 0)}
 									</span>
 								</div>
 							</div>
-							<Button className='w-full mt-4 bg-black text-white hover:bg-gray-800'>
+							<Button
+								disabled={
+									!cartItems ? true : cartItems.length > 0 ? false : true
+								}
+								onClick={() =>
+									makePayment(
+										cartItems?.reduce(function (total, elem) {
+											return total + elem.productPrice * elem.productQty;
+										}, 0),
+										accessToken,
+										cartItems
+									)
+								}
+								className='w-full mt-4 bg-black text-white hover:bg-gray-800'
+							>
 								Proceed to Checkout
 							</Button>
 						</CardContent>

@@ -1,3 +1,4 @@
+import { CartContextItem } from '@context/CartContext';
 import { SignUpFormData, LoginFormData, CartItem } from '@lib/types';
 
 const BASE_URL = import.meta.env.VITE_BASE_API_URL;
@@ -269,4 +270,47 @@ export const deleteCartData = async function (
 	if (response.status === 403) {
 		throw new Error(response.status.toString());
 	}
+};
+
+//Payment
+export const makePayment = async function (
+	amount: number | undefined,
+	accessToken: string | null,
+	items: CartContextItem[] | undefined
+) {
+	const response = await fetch(`${BASE_URL}/payments/create`, {
+		method: 'POST',
+		credentials: 'include',
+		headers: {
+			Authorization: `Bearer ${accessToken}`,
+			'Content-type': 'application/json',
+		},
+		body: JSON.stringify({ amount, items }),
+	});
+
+	const result = await response.json();
+
+	if (result && result._links.checkout) {
+		window.location.href = result._links.checkout.href;
+	}
+};
+
+export const checkPaymentStatus = async function (
+	orderId: string | undefined,
+	accessToken: string | null
+) {
+	const response = await fetch(
+		`${BASE_URL}/payments/payment-status/${orderId}`,
+		{
+			method: 'GET',
+			credentials: 'include',
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+		}
+	);
+
+	const result = await response.json();
+
+	return result;
 };

@@ -16,6 +16,7 @@ import ProfilePage from '@pages/ProfilePage';
 import { useFetchCategoryList } from '@hooks/useProducts';
 import { AuthProvider } from '@context/AuthContext';
 import { CartProvider } from '@context/CartContext';
+import PaymentPage from '@pages/PaymentPage';
 
 function App() {
 	const categoryList = useFetchCategoryList();
@@ -63,6 +64,11 @@ function App() {
 							<Route path='/profile' element={<ProfilePage />} />
 							{/* Routes to the cart when clicked on, i.e. CartPage(/cart) */}
 							<Route path='/cart' element={<CartPage />} />
+							{/* Routes to the payment status page when payment process finishes, i.e. PaymentPage(/payment-status) */}
+							<Route
+								path='/payment-status/:orderId'
+								element={<PaymentPage />}
+							/>
 						</Route>
 					</Route>
 				</Routes>
