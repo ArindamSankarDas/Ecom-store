@@ -7,12 +7,20 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@components/ui/card';
+import { useCart } from '@context/CartContext';
 import { Check } from 'lucide-react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function PaymentPage() {
 	const { orderId } = useParams();
 	const navigate = useNavigate();
+
+	const { removeAllItems } = useCart();
+
+	useEffect(() => {
+		removeAllItems([]);
+	}, [removeAllItems]);
 
 	return (
 		<div className='flex min-h-screen items-center justify-center bg-gray-50 p-4'>

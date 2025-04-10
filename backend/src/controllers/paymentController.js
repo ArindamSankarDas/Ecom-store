@@ -64,9 +64,11 @@ export async function paymentWebhook(req, res, next) {
 			};
 		});
 
-		await prisma.orders.createMany({
+		await prisma.orders.createManyAndReturn({
 			data: updatedItems,
 		});
+
+		await prisma.cartItems.deleteMany({});
 
 		res.sendStatus(200);
 	} catch (error) {

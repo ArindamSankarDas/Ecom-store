@@ -21,15 +21,14 @@ type CartContextType = {
 	cartItems: CartContextItem[] | undefined;
 	setCart: (items: CartContextItem) => void;
 	removeItem: (itemId: string) => void;
+	removeAllItems: (emptyCart: []) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: Props) {
 	const { accessToken, login, logout } = useAuth();
-	const [cartItems, setCartItems] = useState<CartContextItem[] | undefined>(
-		undefined
-	);
+	const [cartItems, setCartItems] = useState<CartContextItem[] | []>([]);
 
 	useEffect(() => {
 		if (accessToken) {
@@ -76,10 +75,15 @@ export function CartProvider({ children }: Props) {
 		});
 	};
 
+	const removeAllItems = (emptyCart: []) => {
+		setCartItems(emptyCart);
+	};
+
 	const value: CartContextType = {
 		cartItems,
 		setCart,
 		removeItem,
+		removeAllItems,
 	};
 
 	return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
