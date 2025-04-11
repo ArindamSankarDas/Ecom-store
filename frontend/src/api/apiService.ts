@@ -295,22 +295,22 @@ export const makePayment = async function (
 	}
 };
 
-export const checkPaymentStatus = async function (
-	orderId: string | undefined,
-	accessToken: string | null
+//Send New Message
+export const sendMessage = async function (
+	accessToken: string | null,
+	message: string
 ) {
-	const response = await fetch(
-		`${BASE_URL}/payments/payment-status/${orderId}`,
-		{
-			method: 'GET',
-			credentials: 'include',
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		}
-	);
+	const response = await fetch(`${BASE_URL}/contact`, {
+		method: 'POST',
+		headers: {
+			'Content-type': 'application/json',
+			Authorization: `Bearer ${accessToken}`,
+		},
+		credentials: 'include',
+		body: JSON.stringify({ message }),
+	});
 
-	const result = await response.json();
-
-	return result;
+	if (response.status === 403) {
+		throw new Error(response.status.toString());
+	}
 };

@@ -44,7 +44,7 @@ function ProfilePage() {
 			}
 		}
 		fetchUser();
-	}, [accessToken]);
+	}, [accessToken, login]);
 
 	const handleSaveName = async () => {
 		try {
