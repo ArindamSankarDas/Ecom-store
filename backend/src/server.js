@@ -9,6 +9,7 @@ import categoryRoute from './routes/category.js';
 import cartRoute from './routes/cart.js';
 import profileRoute from './routes/profile.js';
 import paymentRoute from './routes/payment.js';
+import contactRoute from './routes/contact.js';
 
 import requestLogger from './middlewares/requestLogger.js';
 import errorLogger from './middlewares/errorLogger.js';
@@ -44,6 +45,7 @@ app.use('/category', categoryRoute);
 app.use('/search', searchRoute);
 app.use('/cart', cartRoute);
 app.use('/payments', paymentRoute);
+app.use('/contact', contactRoute);
 app.use('/', rootRoute);
 
 // handles 404 routes

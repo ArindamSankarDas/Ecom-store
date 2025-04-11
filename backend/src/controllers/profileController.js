@@ -10,6 +10,7 @@ export async function getCurrentUserDetails(req, res, next) {
 			where: { email },
 			select: {
 				name: true,
+				email: true,
 			},
 		});
 
