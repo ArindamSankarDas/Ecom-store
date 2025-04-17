@@ -1,7 +1,7 @@
 import { CartContextItem } from '@context/CartContext';
 import { SignUpFormData, LoginFormData, CartItem } from '@lib/types';
 
-const BASE_URL = process.env.BASE_API_URL;
+const BASE_URL = "https://13.49.21.169";
 console.log(BASE_URL);
 
 // Product Fetches
