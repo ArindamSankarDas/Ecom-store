@@ -33,7 +33,7 @@ function ShopPage({ currentPath }: Props) {
 								products.map((productItem) => (
 									<ProductCard
 										key={productItem.id}
-										itemId={productItem.id}
+										itemId={parseInt(productItem.id)}
 										itemPrice={productItem.price}
 										itemPic={productItem.thumbnail}
 										itemTitle={productItem.title}
