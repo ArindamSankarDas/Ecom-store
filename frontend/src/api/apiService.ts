@@ -2,6 +2,7 @@ import { CartContextItem } from '@context/CartContext';
 import { SignUpFormData, LoginFormData, CartItem } from '@lib/types';
 
 const BASE_URL = import.meta.env.BASE_API_URL;
+console.log(BASE_URL);
 
 // Product Fetches
 export const fetchProductsCategoryList = async function (
