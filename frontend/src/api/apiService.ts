@@ -1,8 +1,7 @@
 import { CartContextItem } from '@context/CartContext';
 import { SignUpFormData, LoginFormData, CartItem } from '@lib/types';
 
-const BASE_URL = "https://api.arindamsankardas.dev";
-console.log(BASE_URL);
+const BASE_URL = process.env.BASE_API_URL;
 
 // Product Fetches
 export const fetchProductsCategoryList = async function (
