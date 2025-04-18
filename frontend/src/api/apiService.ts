@@ -1,7 +1,7 @@
 import { CartContextItem } from '@context/CartContext';
 import { SignUpFormData, LoginFormData, CartItem } from '@lib/types';
 
-const BASE_URL = import.meta.env.VITE_BASE_API_URL;
+const BASE_URL = "https://ecomapi.arindamsankardas.dev/";
 
 // Product Fetches
 export const fetchProductsCategoryList = async function (
