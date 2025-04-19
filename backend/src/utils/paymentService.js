@@ -4,6 +4,7 @@ export const mollieClient = createMollieClient({
 	apiKey: process.env.MOLLIE_API_KEY,
 });
 
+// creates a new test payment using mollie
 export async function molliePaymentService(
 	amount,
 	description,
@@ -11,6 +12,7 @@ export async function molliePaymentService(
 	items
 ) {
 	try {
+		// Use your own ngrok site in the .env file
 		const payment = await mollieClient.payments.create({
 			amount: {
 				currency: 'EUR',
@@ -31,6 +33,7 @@ export async function molliePaymentService(
 	}
 }
 
+// to check payment status with paymentId
 export async function molliePaymentStatus(paymentId) {
 	try {
 		const paymentStatus = await mollieClient.payments.get(paymentId);

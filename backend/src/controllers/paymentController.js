@@ -5,6 +5,7 @@ import {
 
 import { prisma } from '../config/prismaConfig.js';
 
+// new payment creation
 export async function createNewPayment(req, res, next) {
 	try {
 		const { amount, items } = req.body;
@@ -30,6 +31,7 @@ export async function createNewPayment(req, res, next) {
 	}
 }
 
+//payment webhook to process the mollie redirect
 export async function paymentWebhook(req, res, next) {
 	try {
 		const { id } = req.body;
