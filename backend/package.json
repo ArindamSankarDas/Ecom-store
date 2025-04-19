@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "node -r dotenv/config --watch --watch-preserve-output .",
-		"start": "node ."
+		"start": "node -r dotenv/config ."
 	},
 	"keywords": [
 		"node",
@@ -22,10 +22,10 @@
 		"cookie-parser": "^1.4.7",
 		"cors": "^2.8.5",
 		"express": "^4.21.2",
-		"jsonwebtoken": "^9.0.2"
+		"jsonwebtoken": "^9.0.2",	
+		"dotenv": "^16.4.7"
 	},
 	"devDependencies": {
-		"dotenv": "^16.4.7",
 		"prisma": "^6.3.1"
 	}
 }
